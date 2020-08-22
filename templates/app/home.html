@@ -17,4 +17,10 @@
     <input type="submit" value="Upload">
 </form>
 
+{% if data_columns %}
+    {% for column, type in data_columns.items %}
+        <p>{{ column }} - {{ type }}</p>
+    {% endfor %}
+{% endif %}
+
 {% endblock %}
