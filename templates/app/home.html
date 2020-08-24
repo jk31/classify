@@ -17,10 +17,8 @@
     <input type="submit" value="Upload">
 </form>
 
-{% if data_columns %}
-    {% for column, type in data_columns.items %}
-        <p>{{ column }} - {{ type }}</p>
-    {% endfor %}
+{% if create_model_available %}
+    <a href="{% url 'app:create_model' %}">Create Model</a>
 {% endif %}
 
 {% endblock %}

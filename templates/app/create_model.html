@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block head_title %}Create Model{% endblock %}
+
+
+{% block extra_head %}
+{% endblock %}
+
+
+{% block content %}
+
+<h1>Create Model</h1>
+
+{% if data_columns %}
+    <form action="{% url 'app:model_created' %}" method="POST">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <th>Variable</th>
+            <th>Type</th>
+            <th>Use to predict</th>
+            <th>Goal of Prediction</th>
+        </tr>
+        {% for column, type in data_columns.items %}
+        <tr>
+            <td>{{ column }}</td>
+            <td>
+                {{ type }}
+            </td>
+            <td><input type="checkbox" name="checkbox" value="checkbox-{{ column }}" id="checkbox"></td>
+            <td>Goal radiobutton</td>
+        </tr> 
+        {% endfor %}
+    </table>
+    <input type="submit" value="Create my model!">
+    </form>
+{% else %}
+    <h2>Something went wrong...</h2>
+{% endif %}
+
+{% endblock %}
