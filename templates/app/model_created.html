@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block head_title %}Create Model{% endblock %}
+
+
+{% block extra_head %}
+{% endblock %}
+
+
+{% block content %}
+
+{% if model_created %}
+    <h1>Model created</h1>
+    <p>Training Accurracy {{ training_acc }}%</p>
+    <p>Test Accurracy {{ test_acc }}%</p>
+{% else %}
+    <h1>Something went wrong...</h1>
+{% endif %}
+
+{% endblock %}

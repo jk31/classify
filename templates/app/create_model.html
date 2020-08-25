@@ -29,8 +29,8 @@
             <td>
                 {{ type }}
             </td>
-            <td><input type="checkbox" name="checkbox" value="checkbox-{{ column }}" id="checkbox"></td>
-            <td>Goal radiobutton</td>
+            <td><input type="checkbox" name="checkbox" value="checkbox-{{ column }}" id="checkbox-{{ column }}"></td>
+            <td><input type="radio" name="radio" value="radio-{{ column }}" id="radio-{{ column }}"></td>
         </tr> 
         {% endfor %}
     </table>
