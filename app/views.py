@@ -13,7 +13,7 @@ from sklearn.metrics import accuracy_score
 from joblib import dump, load
 
 
-from app.forms import UploadFileForm
+from app.forms import UploadFileForm, PredictForm
 from app.models import Dataset, ClassificationModel
 
 MEDIA_ROOT = settings.MEDIA_ROOT
@@ -75,10 +75,10 @@ def train_model(id, column_with_type, goal):
         model = model.fit(x_df_train, y_df_train)
         training_acc = model.score(x_df_train, y_df_train)
         test_acc = model.score(x_df_test, y_df_test)
-        print("before dumb")
+        print("before dump")
         dump(model, f"{MEDIA_ROOT}/model_{id}.joblib")
 
-        return training_acc, test_acc
+        return training_acc, test_acc, x_df_train.columns
     except:
         return False
     
@@ -126,14 +126,11 @@ def home(request):
 def create_model(request):
     dataset_id = request.session.get('dataset_id')
 
-    try:
-        ClassificationModel.objects.get(trained_model=f"model_{dataset_id}.joblib")
-        return redirect("app:model_created")
-    except:
-        pass
-
     context = {
         "data_columns": None,
+        "model_created": None,
+        "training_acc": None,
+        "test_acc": None,
     }
 
     if dataset_id == None:
@@ -141,31 +138,15 @@ def create_model(request):
     else:
         context["data_columns"] = data_show_columns(dataset_id)
 
-    return render(request, "app/create_model.html", context)
-    
-def model_created(request):
-    dataset_id = request.session.get('dataset_id')
-    if dataset_id == None:
-            return redirect("app:home")
-
-    context = {
-        "model_created": None,
-        "training_acc": None,
-        "test_acc": None,
-    }
-
     try:
-        model = ClassificationModel.objects.get(trained_model=f"model_{dataset_id}.joblib")
-        context["model_created"] = True
-        context["training_acc"] = round(float(model.training_acc), 3) * 100
-        context["test_acc"] = round(float(model.test_acc), 3) * 100
+        ClassificationModel.objects.get(trained_model=f"model_{dataset_id}.joblib")
+        return redirect("app:predict")
     except:
         pass
 
-
     if request.method == "POST":
         try:
-            # clear request data
+        # clear request data
             checkboxes = [re.search(r"\-(.*)", checkbox)[1] for checkbox in request.POST.getlist("checkbox")]
             goal = re.search(r"\-(.*)", request.POST.get("radio"))[1]
 
@@ -177,19 +158,65 @@ def model_created(request):
             goal = data_goal_in_columns(dataset_id, goal)
             dataset = Dataset.objects.get(id=dataset_id)
             print("before training")
-            training_acc, test_acc = train_model(dataset_id, column_with_type, goal)
-            context["training_acc"], context["test_acc"] = round(training_acc, 3) * 100, round(test_acc, 3) * 100
+            training_acc, test_acc, training_columns = train_model(dataset_id, column_with_type, goal)
 
-            new_model = ClassificationModel(dataset=dataset, variables=column_with_type, goal=goal,
-                                             trained_model=f"model_{dataset_id}.joblib", training_acc=training_acc, test_acc=test_acc)
+            new_model = ClassificationModel(dataset=dataset, training_columns={"training_columns" : list(training_columns)}, variables=column_with_type, goal=goal,
+                                                trained_model=f"model_{dataset_id}.joblib", training_acc=training_acc, test_acc=test_acc)
             new_model.save()
 
             context["model_created"] = True
         except:
             return HttpResponse("something went wrong")
         
-        return render(request, "app/model_created.html", context)
+        return redirect("app:predict")
 
-    return render(request, "app/model_created.html", context)
+    return render(request, "app/create_model.html", context)
+    
+def predict(request):
+    dataset_id = request.session.get('dataset_id')
+    if dataset_id == None:
+            return redirect("app:home")
+
+    context = {
+        "model_created": None,
+        "training_acc": None,
+        "test_acc": None,
+        "form": None,
+        "prediction": None,
+    }
+
+    try:
+        model = ClassificationModel.objects.get(trained_model=f"model_{dataset_id}.joblib")
+        context["model_created"] = True
+        context["training_acc"] = round(float(model.training_acc), 3) * 100
+        context["test_acc"] = round(float(model.test_acc), 3) * 100
+    except:
+        return redirect("app:home")
+
+    form = PredictForm(model.variables)
+    context["form"] = form
+
+    if request.method == "POST":
+        form = PredictForm(model.variables, request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            # move the "field_" prefix
+            cd = {re.match(f"field_(.*)", x)[1] : cd[x] for x in cd}
+            df_cd = pd.DataFrame([cd])
+
+            training_columns = model.training_columns
+            
+            df_predict = pd.DataFrame(columns=training_columns["training_columns"])
+            df_predict = df_predict.append(pd.get_dummies(df_cd))
+            df_predict = df_predict.fillna(0)
+
+            prediction_model = load(f"{MEDIA_ROOT}/model_{dataset_id}.joblib")
+            prediction = prediction_model.predict(df_predict.iloc[0,:].values.reshape(1, -1))
+            context["prediction"] = str(prediction[0])
+        
+        context["form"] = form
+            
+    return render(request, "app/predict.html", context)
+
 
     

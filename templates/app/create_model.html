@@ -14,7 +14,7 @@
 <h1>Create Model</h1>
 
 {% if data_columns %}
-    <form action="{% url 'app:model_created' %}" method="POST">
+    <form action="" method="POST">
     {% csrf_token %}
     <table>
         <tr>
@@ -34,7 +34,7 @@
         </tr> 
         {% endfor %}
     </table>
-    <input type="submit" value="Create my model!">
+    <input type="submit" value="Train model">
     </form>
 {% else %}
     <h2>Something went wrong...</h2>

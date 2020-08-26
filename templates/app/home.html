@@ -20,7 +20,7 @@
 {% if uploaded_no_training %}
     <a href="{% url 'app:create_model' %}">Create model</a>
 {% elif trained %}
-    <a href="{% url 'app:model_created' %}">Use trained model</a>
+    <a href="{% url 'app:predict' %}">Use trained model</a>
 {% endif %}
 
 {% endblock %}
