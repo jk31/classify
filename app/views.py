@@ -93,6 +93,7 @@ def home(request):
         "trained": None
     }
 
+    # Upload file from main page
     if request.method == "POST":
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
