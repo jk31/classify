@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block head_title %}Datasets{% endblock %}
+
+
+{% block extra_head %}
+{% endblock %}
+
+
+{% block content %}
+
+<h2>Upload new dataset</h2>
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ datasetuploadform|crispy }}
+    <input type="submit" value="Upload">
+</form>
+
+<h2>Your datasets</h2>
+{% for dataset in datasets %}
+    <p>{{ dataset.name }} - {{ dataset.created }} - 
+        <a href="{% url 'app:training' dataset_id=dataset.pk %}">Train a model</a>
+    </p>    
+{% endfor %}
+
+{% if data_broken %}
+    <h3>Something is wrong with your dataset.</h3>
+{% endif %}
+
+{% endblock %}

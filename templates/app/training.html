@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block head_title %}Training{% endblock %}
+
+
+{% block extra_head %}
+{% endblock %}
+
+
+{% block content %}
+
+<h1>Training</h1>
+
+<p>{{ dataset.name }} - {{ dataset.created }}</p>
+
+{% if training_acc and test_acc %}
+    <p>Training Accuracy: <b>{{ training_acc }}%</b> - Test Accuracy <b>{{ test_acc }}%</b></p>
+{% endif %}
+
+
+
+<form action="" method="POST">
+    {% csrf_token %}
+    {{ trainingform|crispy }}
+    <input type="submit" value="Train model">
+</form>
+
+{% endblock %}

@@ -28,6 +28,21 @@
 <body>
     {% block body %}
 
+    <div>
+      <strong>Menu:</strong>
+      <ul>
+        <li><a href="{% url 'app:home' %}">Home</a></li>
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'app:datasets' %}">My Datasets</a></li>
+        <li><a href="{% url 'app:models' %}">My Models</a></li>
+        <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
+        {% else %}
+        <li><a href="{% url 'account_login' %}">Sign In</a></li>
+        <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
+        {% endif %}
+      </ul>
+    </div>
+
     {% if messages %}
     <div>
       <strong>Messages:</strong>
@@ -38,18 +53,6 @@
       </ul>
     </div>
     {% endif %}
-
-    <div>
-      <strong>Menu:</strong>
-      <ul>
-        {% if user.is_authenticated %}
-        <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
-        {% else %}
-        <li><a href="{% url 'account_login' %}">Sign In</a></li>
-        <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
-        {% endif %}
-      </ul>
-    </div>
     
     {% block content %}
     {% endblock %}

@@ -1,9 +1,31 @@
 from django import forms
 from django.forms import BaseFormSet
-from django.core.validators import FileExtensionValidator
 
-class UploadFileForm(forms.Form):
-    data = forms.FileField(validators=[FileExtensionValidator(allowed_extensions=["xlsx"])])
+from app.models import Dataset
+
+# class UploadFileForm(forms.Form):
+#     data = forms.FileField(validators=[FileExtensionValidator(allowed_extensions=["xlsx"])])
+
+
+class DatasetUploadForm(forms.ModelForm):
+    class Meta:
+        model = Dataset
+        fields = ("dataset",)
+
+
+class TrainingForm(forms.Form):
+    def __init__(self, columns, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        choices = tuple([(col, col) for col in columns if columns[col] == "Choice"])
+        field = forms.ChoiceField(choices=choices)
+        self.fields["goal"] = field
+        
+        for col in columns:
+            field = forms.BooleanField(widget=forms.CheckboxInput, required=False)
+            self.fields[f"checkbox_{col}"] = field
+
+        
 
 
 class PredictForm(forms.Form):
