@@ -1,3 +1,5 @@
+## Model
+
 * give model name, unique with dataset?
 * make model downloadable
 * make create_model form required, atleast one variable and one goal
@@ -5,3 +7,6 @@
 * only choice variables as goal
 
 https://stackoverflow.com/questions/54569714/django-app-generating-forms-dynamically-from-json/54570024
+
+
+## Account
