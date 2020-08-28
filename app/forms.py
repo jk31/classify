@@ -14,7 +14,8 @@ class TrainingForm(forms.Form):
     def __init__(self, columns, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        choices = tuple([(col, col) for col in columns if columns[col] == "Choice"])
+        choices = tuple([(col, col) for col in columns])
+        #  if columns[col] == "Choice"
         field = forms.ChoiceField(choices=choices)
         self.fields["goal"] = field
         

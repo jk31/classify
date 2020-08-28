@@ -81,7 +81,6 @@ def training(request, dataset_id):
     context["trainingform"] = trainingform
 
     if request.method == "POST":
-        print(request.POST)
         trainingform = TrainingForm(context["dataset_columns"], request.POST)
         if trainingform.is_valid():
             cd = trainingform.cleaned_data
@@ -128,14 +127,18 @@ def save_model(request):
             cd = savemodelform.cleaned_data
             model_pk = cd["model_pk"]
             saved_model = ClassificationModel.objects.get(pk=model_pk)
+
+            if saved_model.owner != request.user:
+                return redirect("app:datasets")
+
             saved_model.saved = True
             saved_model.save()
 
             # delete classification models that belong to the user, but are not saved.
             ClassificationModel.objects.filter(owner=request.user, saved=False).delete()
-            return HttpResponse("model saved")
+            return redirect("app:models")
         else:
-            return HttpResponse("model not saved")
+            return redirect("app:training")
 
 
 @login_required

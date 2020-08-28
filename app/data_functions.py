@@ -76,10 +76,6 @@ def train_model(request, dataset, column_with_type, goal):
         training_acc = model.score(x_df_train, y_df_train)
         test_acc = model.score(x_df_test, y_df_test)
         
-        print(dataset)
-        name_for_model = dataset.split["."][0]
-        dump(model, f"{MEDIA_ROOT}/models/model_{name_for_model}.joblib")
-
         associated_dataset = Dataset.objects.get(dataset=dataset)
 
         new_model = ClassificationModel(
@@ -88,9 +84,13 @@ def train_model(request, dataset, column_with_type, goal):
             training_columns={"training_columns" : list(x_df_train.columns)}, 
             variables=column_with_type,
             goal=goal,
-            trained_model=f"/models/model_{name_for_model}.joblib", 
             training_acc=training_acc, 
             test_acc=test_acc)
+
+        new_model.save()    
+
+        dump(model, f"{MEDIA_ROOT}/models/model_{new_model.pk}.joblib")
+        new_model.trained_model = f"/models/model_{new_model.pk}.joblib"
 
         new_model.save()
         
