@@ -19,6 +19,13 @@
     <p>Training Accuracy: <b>{{ training_acc }}%</b> - Test Accuracy <b>{{ test_acc }}%</b></p>
 {% endif %}
 
+{% if training_acc %}
+<form action="/save-model" method="POST">
+    {% csrf_token %}
+    {{ savemodelform|crispy }}
+    <input type="submit" value="Save model">
+</form>
+{% endif %}
 
 
 <form action="" method="POST">

@@ -27,6 +27,7 @@ class ClassificationModel(models.Model):
     dataset = models.ForeignKey(Dataset, on_delete=models.CASCADE, related_name='models')
 
     created = models.DateTimeField(auto_now_add=True)
+    saved = models.BooleanField(default=False)
 
     training_columns = JSONField(blank=True, null=True)
     variables = JSONField(blank=True, null=True)
@@ -36,5 +37,8 @@ class ClassificationModel(models.Model):
     training_acc = models.FloatField(blank=True, null=True)
     test_acc = models.FloatField(blank=True, null=True)
 
+    def __str__(self):
+        return f"{self.dataset} - {self.created}"
+
     class Meta:
-        ordering = ("created",)
+        ordering = ("-created",)

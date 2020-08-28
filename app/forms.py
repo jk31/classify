@@ -3,9 +3,6 @@ from django.forms import BaseFormSet
 
 from app.models import Dataset
 
-# class UploadFileForm(forms.Form):
-#     data = forms.FileField(validators=[FileExtensionValidator(allowed_extensions=["xlsx"])])
-
 
 class DatasetUploadForm(forms.ModelForm):
     class Meta:
@@ -25,9 +22,11 @@ class TrainingForm(forms.Form):
             field = forms.BooleanField(widget=forms.CheckboxInput, required=False)
             self.fields[f"checkbox_{col}"] = field
 
+
+class SaveModelForm(forms.Form):
+    model_pk = forms.IntegerField(widget = forms.HiddenInput(), required=True)
+
         
-
-
 class PredictForm(forms.Form):
     def __init__(self, variables, *args, **kwargs):
         super().__init__(*args, **kwargs)

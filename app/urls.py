@@ -8,6 +8,7 @@ urlpatterns = [
     path("datasets", views.datasets, name="datasets"),
     path("models", views.models, name="models"),
     path("training/<int:dataset_id>", views.training, name="training"),
+    path("save-model", views.save_model, name="save_model"),
     path("create-model", views.create_model, name="create_model"),
     path("predict", views.predict, name="predict"),
 ]

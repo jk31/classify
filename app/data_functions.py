@@ -55,7 +55,7 @@ def data_goal_in_columns(dataset, goal):
         return False
 
 
-def train_model(dataset, column_with_type, goal):
+def train_model(request, dataset, column_with_type, goal):
     try:
         df = pd.read_excel(f"{MEDIA_ROOT}/{dataset}")
         # keep only variables and goal
@@ -75,8 +75,26 @@ def train_model(dataset, column_with_type, goal):
         # return accuracy
         training_acc = model.score(x_df_train, y_df_train)
         test_acc = model.score(x_df_test, y_df_test)
-        # dump(model, f"{MEDIA_ROOT}/model_{id}.joblib")
-        return dataset, column_with_type, goal, training_acc, test_acc, x_df_train.columns
+        
+        print(dataset)
+        name_for_model = dataset.split["."][0]
+        dump(model, f"{MEDIA_ROOT}/models/model_{name_for_model}.joblib")
+
+        associated_dataset = Dataset.objects.get(dataset=dataset)
+
+        new_model = ClassificationModel(
+            owner=request.user,
+            dataset=associated_dataset, 
+            training_columns={"training_columns" : list(x_df_train.columns)}, 
+            variables=column_with_type,
+            goal=goal,
+            trained_model=f"/models/model_{name_for_model}.joblib", 
+            training_acc=training_acc, 
+            test_acc=test_acc)
+
+        new_model.save()
+        
+        return new_model.pk, training_acc, test_acc,
     except:
         return False
     

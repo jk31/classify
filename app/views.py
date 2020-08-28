@@ -10,7 +10,7 @@ import uuid
 
 import pandas as pd
 
-from app.forms import DatasetUploadForm, TrainingForm, PredictForm
+from app.forms import DatasetUploadForm, TrainingForm, SaveModelForm, PredictForm
 from app.models import Dataset, ClassificationModel
 
 from app.data_functions import dataset_columns, data_checkboxes_in_columns, data_goal_in_columns, train_model, prediction, bugger
@@ -33,7 +33,7 @@ def datasets(request):
         "datasetuploadform": None,
     }
 
-    datasets = Dataset.objects.all().filter(owner__username=request.user)
+    datasets = Dataset.objects.filter(owner=request.user)
     context["datasets"] = datasets
 
     if request.method == "POST":
@@ -44,7 +44,7 @@ def datasets(request):
                 #TODO heree add function that checks the dataset, like empty values...
                 pd.read_excel(cd["dataset"])
                 new_dataset = datasetuploadform.save(commit=False)
-                new_dataset.name = str(request.FILES['dataset']).split(".")[0]
+                new_dataset.name = str(cd["dataset"]).split(".")[0]
                 new_dataset.owner = request.user
                 new_dataset.save()
             except:
@@ -62,6 +62,7 @@ def training(request, dataset_id):
     context = {
         "dataset": None,
         "trainingform": None,
+        "savemodelform": None,
         "dataset_columns": None,
         "training_acc": None,
         "test_acc": None,
@@ -80,6 +81,7 @@ def training(request, dataset_id):
     context["trainingform"] = trainingform
 
     if request.method == "POST":
+        print(request.POST)
         trainingform = TrainingForm(context["dataset_columns"], request.POST)
         if trainingform.is_valid():
             cd = trainingform.cleaned_data
@@ -95,7 +97,6 @@ def training(request, dataset_id):
             # check if columns and goal in df, very unlikely, 
             #TODO put this all in train_model?
             column_with_type = data_checkboxes_in_columns(dataset.dataset, checkboxes)
-            print(column_with_type)
             goal = data_goal_in_columns(dataset.dataset, goal)
             if (column_with_type == False) or (goal == False):
                 messages.error(request, "It seems like your selection does not align with the provided dataset.")
@@ -104,29 +105,37 @@ def training(request, dataset_id):
             # refill form
             context["trainingform"] = trainingform
 
-            train_results = train_model(dataset.dataset, column_with_type, goal)
+            train_results = train_model(request, dataset.dataset, column_with_type, goal)
             if train_results == False:
                 messages.error(request, "Something went wrong during the training.")
                 return render(request, "app/training.html", context)
             else:
-                dataset, column_with_type, goal, training_acc, test_acc, training_columns = train_results
-                print(training_acc, test_acc)
+                model_pk, training_acc, test_acc = train_results
                 messages.success(request, "Training was succesful.")
             
-            context["training_acc"] = round(training_acc, 4) * 100
-            context["test_acc"] = round(test_acc, 4)* 100
+            context["training_acc"] = round(training_acc, 5) * 100
+            context["test_acc"] = round(test_acc, 5) * 100
 
-
-            # new_model = ClassificationModel(dataset=dataset, 
-            #                                 training_columns={"training_columns" : list(training_columns)}, 
-            #                                 variables=column_with_type, 
-            #                                 goal=goal,
-            #                                 trained_model=f"model_{dataset_id}.joblib", 
-            #                                 training_acc=training_acc, test_acc=test_acc)
-            # new_model.save()
-
-
+            savemodelform = SaveModelForm(initial={"model_pk": model_pk})
+            context["savemodelform"] = savemodelform
     return render(request, "app/training.html", context)
+
+@login_required
+def save_model(request):
+    if request.method == "POST":
+        savemodelform = SaveModelForm(request.POST)
+        if savemodelform.is_valid():
+            cd = savemodelform.cleaned_data
+            model_pk = cd["model_pk"]
+            saved_model = ClassificationModel.objects.get(pk=model_pk)
+            saved_model.saved = True
+            saved_model.save()
+
+            # delete classification models that belong to the user, but are not saved.
+            ClassificationModel.objects.filter(owner=request.user, saved=False).delete()
+            return HttpResponse("model saved")
+        else:
+            return HttpResponse("model not saved")
 
 
 @login_required
@@ -169,7 +178,7 @@ def create_model(request):
             goal = data_goal_in_columns(dataset_id, goal)
             dataset = Dataset.objects.get(id=dataset_id)
             print("before training")
-            training_acc, test_acc, training_columns = train_model(dataset_id, column_with_type, goal)
+            training_acc, test_acc, training_columns = train_model(request, dataset_id, column_with_type, goal)
 
             new_model = ClassificationModel(dataset=dataset, 
                                             training_columns={"training_columns" : list(training_columns)}, 
