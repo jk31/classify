@@ -24,7 +24,7 @@ class Dataset(models.Model):
 
 class ClassificationModel(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="owner_models", on_delete=models.CASCADE, blank=True, null=True)
-    dataset = models.ForeignKey(Dataset, on_delete=models.CASCADE, related_name='models')
+    dataset = models.ForeignKey(Dataset, on_delete=models.SET_NULL, related_name='models', null=True)
 
     created = models.DateTimeField(auto_now_add=True)
     saved = models.BooleanField(default=False)

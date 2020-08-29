@@ -47,6 +47,7 @@ def datasets(request):
                 new_dataset.name = str(cd["dataset"]).split(".")[0]
                 new_dataset.owner = request.user
                 new_dataset.save()
+                messages.success(request, "Your dataset has been uploaded..")
             except:
                 messages.error(request, "Your dataset is not suitable.")
     else:
@@ -135,7 +136,11 @@ def save_model(request):
             saved_model.save()
 
             # delete classification models that belong to the user, but are not saved.
-            ClassificationModel.objects.filter(owner=request.user, saved=False).delete()
+            remove_not_saved = ClassificationModel.objects.filter(owner=request.user, saved=False)
+            for model in remove_not_saved:
+                model.trained_model.delete()
+            
+            remove_not_saved.delete()
             return redirect("app:models")
         else:
             return redirect("app:training")

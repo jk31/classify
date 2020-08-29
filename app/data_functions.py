@@ -90,7 +90,7 @@ def train_model(request, dataset, column_with_type, goal):
         new_model.save()    
 
         dump(model, f"{MEDIA_ROOT}/models/model_{new_model.pk}.joblib")
-        new_model.trained_model = f"/models/model_{new_model.pk}.joblib"
+        new_model.trained_model = f"{MEDIA_ROOT}/models/model_{new_model.pk}.joblib"
 
         new_model.save()
         
