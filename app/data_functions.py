@@ -100,7 +100,7 @@ def train_model(request, dataset, column_with_type, goal):
     
 
 def prediction(cd, model):
-    # move the "field_" prefix
+    # remove the "field_" prefix
     cd = {re.match(f"field_(.*)", x)[1] : cd[x] for x in cd}
     df_cd = pd.DataFrame([cd])
 
@@ -110,7 +110,7 @@ def prediction(cd, model):
     df_predict = df_predict.append(pd.get_dummies(df_cd))
     df_predict = df_predict.fillna(0)
 
-    prediction_model = load(f"{MEDIA_ROOT}/model_{dataset_id}.joblib")
+    prediction_model = load(f"{model.trained_model}")
     prediction = prediction_model.predict(df_predict.iloc[0,:].values.reshape(1, -1))
 
     return str(prediction[0])

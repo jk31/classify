@@ -72,7 +72,6 @@ def training(request, dataset_id):
     dataset = get_object_or_404(Dataset, pk=dataset_id)
 
     if dataset.owner != request.user:
-        print("not your dataset")
         return redirect("app:datasets")
 
     context["dataset"] = dataset
@@ -148,94 +147,68 @@ def save_model(request):
 
 @login_required
 def models(request):
-    return HttpResponse("My Models")
-
-
-def create_model(request):
-    dataset_id = request.session.get('dataset_id')
-
     context = {
-        "data_columns": None,
-        "model_created": None,
-        "training_acc": None,
-        "test_acc": None,
+        "models": None
     }
-
-    if dataset_id == None:
-        return redirect("app:home")
-    else:
-        context["data_columns"] = data_show_columns(dataset_id)
-
-    try:
-        ClassificationModel.objects.get(trained_model=f"model_{dataset_id}.joblib")
-        return redirect("app:predict")
-    except:
-        pass
-
-    if request.method == "POST":
-        try:
-            # clear request data
-            checkboxes = [re.search(r"\-(.*)", checkbox)[1] for checkbox in request.POST.getlist("checkbox")]
-            goal = re.search(r"\-(.*)", request.POST.get("radio"))[1]
-
-            if goal in checkboxes:
-                checkboxes.remove(goal)
-
-            # check if columns in df and if yes save to ClassificationModel
-            column_with_type = data_checkboxes_in_columns(dataset_id, checkboxes)
-            goal = data_goal_in_columns(dataset_id, goal)
-            dataset = Dataset.objects.get(id=dataset_id)
-            print("before training")
-            training_acc, test_acc, training_columns = train_model(request, dataset_id, column_with_type, goal)
-
-            new_model = ClassificationModel(dataset=dataset, 
-                                            training_columns={"training_columns" : list(training_columns)}, 
-                                            variables=column_with_type, 
-                                            goal=goal,
-                                            trained_model=f"model_{dataset_id}.joblib", 
-                                            training_acc=training_acc, test_acc=test_acc)
-            new_model.save()
-
-            context["model_created"] = True
-        except:
-            return HttpResponse("something went wrong")
-        
-        return redirect("app:predict")
-
-    return render(request, "app/create_model.html", context)
+    models = ClassificationModel.objects.filter(owner=request.user, saved=True)
+    context["models"] = models
+    return render(request, "app/models.html", context)
 
 @login_required 
-def predict(request):
-    dataset_id = request.session.get('dataset_id')
-    if dataset_id == None:
-            return redirect("app:home")
+def predict(request, model_id):
 
     context = {
-        "model_created": None,
-        "training_acc": None,
-        "test_acc": None,
-        "form": None,
-        "prediction": None,
+        "model": None,
+        "predictform": None,
+        "predictionresult": None,
     }
 
-    try:
-        model = ClassificationModel.objects.get(trained_model=f"model_{dataset_id}.joblib")
-        context["model_created"] = True
-        context["training_acc"] = round(float(model.training_acc), 3) * 100
-        context["test_acc"] = round(float(model.test_acc), 3) * 100
-    except:
-        return redirect("app:home")
+    model = get_object_or_404(ClassificationModel, pk=model_id)
+    if model.owner != request.user:
+        return redirect("app:models")
+    context["model"] = model
 
-    form = PredictForm(model.variables)
-    context["form"] = form
+    predictform = PredictForm(model.variables)
+    context["predictform"] = predictform
 
     if request.method == "POST":
-        form = PredictForm(model.variables, request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            context["prediction"] = prediction(cd, model)
+        predictform = PredictForm(model.variables, request.POST)
+        if predictform.is_valid():
+            cd = predictform.cleaned_data
+            prediction_result = prediction(cd, model)
+            context["predictionresult"] = prediction_result
+            context["predictform"] = predictform
+
+    # dataset_id = request.session.get('dataset_id')
+    # if dataset_id == None:
+    #         return redirect("app:home")
+
+    # context = {
+    #     "model_created": None,
+    #     "training_acc": None,
+    #     "test_acc": None,
+    #     "form": None,
+    #     "prediction": None,
+    # }
+
+    # try:
+    #     model = ClassificationModel.objects.get(trained_model=f"model_{dataset_id}.joblib")
+    #     context["model_created"] = True
+    #     context["training_acc"] = round(float(model.training_acc), 3) * 100
+    #     context["test_acc"] = round(float(model.test_acc), 3) * 100
+    # except:
+    #     return redirect("app:home")
+
+    # form = PredictForm(model.variables)
+    # context["form"] = form
+
+    # if request.method == "POST":
+    #     form = PredictForm(model.variables, request.POST)
+    #     if form.is_valid():
+    #         cd = form.cleaned_data
+    #         context["prediction"] = prediction(cd, model)
         
-        context["form"] = form
+    #     context["form"] = form
             
     return render(request, "app/predict.html", context)
     

@@ -11,4 +11,13 @@
 
 {% block content %}
 
+{% if models %}
+    {% for model in models %}
+        <p>{{ model.dataset }} - {{ model.created }}</p>
+        <a href="{% url 'app:predict' model_id=model.pk %}">Use model for predictions</a>
+    {% endfor %}
+{% else %}
+    <h2>You haven't saved any models yet.</h2>
+{% endif %}
+
 {% endblock %}
