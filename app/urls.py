@@ -6,8 +6,9 @@ app_name = "app"
 urlpatterns = [
     path("", views.home, name="home"),
     path("datasets", views.datasets, name="datasets"),
-    path("models", views.models, name="models"),
+    path("datasets/delete/<int:dataset_id>", views.dataset_delete, name="dataset_delete"),
     path("training/<int:dataset_id>", views.training, name="training"),
+    path("models", views.models, name="models"),
     path("save-model", views.save_model, name="save_model"),
     path("predict/<int:model_id>", views.predict, name="predict"),
 ]

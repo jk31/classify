@@ -18,15 +18,19 @@
     <input type="submit" value="Upload">
 </form>
 
-<h2>Your datasets</h2>
-{% for dataset in datasets %}
-    <p>{{ dataset.name }} - {{ dataset.created }} - 
-        <a href="{% url 'app:training' dataset_id=dataset.pk %}">Train a model</a>
-    </p>    
-{% endfor %}
-
-{% if data_broken %}
-    <h3>Something is wrong with your dataset.</h3>
+{% if datasets %}
+    <h2>Your datasets</h2>
+    {% for dataset in datasets %}
+        <p>{{ dataset.name }} - {{ dataset.created }} - 
+            <a href="{% url 'app:training' dataset_id=dataset.pk %}">Train a model</a>
+            <form action="{% url 'app:dataset_delete' dataset_id=dataset.pk%}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Delete">
+            </form>
+        </p>    
+    {% endfor %}
+{% else %}
+    <h2>You have no datasets yet...</h2>
 {% endif %}
 
 {% endblock %}

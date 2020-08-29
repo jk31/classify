@@ -21,7 +21,8 @@ class TrainingForm(forms.Form):
         
         for col in columns:
             field = forms.BooleanField(widget=forms.CheckboxInput, required=False)
-            self.fields[f"checkbox_{col}"] = field
+            self.fields[f"variable_{col}"] = field
+            self.fields[f"variable_{col}"].label = col
 
 
 class SaveModelForm(forms.Form):
@@ -34,8 +35,8 @@ class PredictForm(forms.Form):
         for var in variables:
             if variables[var] == "Numerical":
                 field = forms.FloatField(required=True)
-                self.fields[f"field_{var}"] = field
+                self.fields[var] = field
             elif type(variables[var] == list):
                 choices = tuple([(x, x) for x in variables[var]])
                 field = forms.ChoiceField(choices=choices)
-                self.fields[f"field_{var}"] = field
+                self.fields[var] = field

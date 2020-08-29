@@ -56,6 +56,7 @@ def data_goal_in_columns(dataset, goal):
 
 
 def train_model(request, dataset, column_with_type, goal):
+    '''Train the model and save it, also takes care of the deletion of not saved models'''
     try:
         df = pd.read_excel(f"{MEDIA_ROOT}/{dataset}")
         # keep only variables and goal
@@ -100,8 +101,8 @@ def train_model(request, dataset, column_with_type, goal):
     
 
 def prediction(cd, model):
-    # remove the "field_" prefix
-    cd = {re.match(f"field_(.*)", x)[1] : cd[x] for x in cd}
+    '''Make prediction and return result'''
+
     df_cd = pd.DataFrame([cd])
 
     training_columns = model.training_columns

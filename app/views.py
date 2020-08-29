@@ -57,6 +57,16 @@ def datasets(request):
     context["datasetuploadform"] = datasetuploadform
     return render(request, "app/datasets.html", context)
 
+@login_required
+def dataset_delete(request, dataset_id):
+    if request.method == "POST":
+        dataset = Dataset.objects.get(pk=dataset_id)
+        if dataset.owner == request.user:
+            dataset.dataset.delete()
+            dataset.delete()
+            messages.success(request, "Dataset deleted.")
+    return redirect("app:datasets")
+
 
 @login_required
 def training(request, dataset_id):
@@ -178,37 +188,6 @@ def predict(request, model_id):
             prediction_result = prediction(cd, model)
             context["predictionresult"] = prediction_result
             context["predictform"] = predictform
-
-    # dataset_id = request.session.get('dataset_id')
-    # if dataset_id == None:
-    #         return redirect("app:home")
-
-    # context = {
-    #     "model_created": None,
-    #     "training_acc": None,
-    #     "test_acc": None,
-    #     "form": None,
-    #     "prediction": None,
-    # }
-
-    # try:
-    #     model = ClassificationModel.objects.get(trained_model=f"model_{dataset_id}.joblib")
-    #     context["model_created"] = True
-    #     context["training_acc"] = round(float(model.training_acc), 3) * 100
-    #     context["test_acc"] = round(float(model.test_acc), 3) * 100
-    # except:
-    #     return redirect("app:home")
-
-    # form = PredictForm(model.variables)
-    # context["form"] = form
-
-    # if request.method == "POST":
-    #     form = PredictForm(model.variables, request.POST)
-    #     if form.is_valid():
-    #         cd = form.cleaned_data
-    #         context["prediction"] = prediction(cd, model)
-        
-    #     context["form"] = form
             
     return render(request, "app/predict.html", context)
     
