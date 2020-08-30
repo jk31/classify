@@ -1,7 +1,7 @@
 from django.conf import settings
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
@@ -67,6 +67,18 @@ def dataset_delete(request, dataset_id):
             messages.success(request, "Dataset deleted.")
     return redirect("app:datasets")
 
+
+@login_required
+def dataset_download(request, dataset_id):
+    dataset = Dataset.objects.get(pk=dataset_id)
+    if dataset.owner == request.user:
+        file = open(MEDIA_ROOT + "/" + str(dataset.dataset), "rb")
+        response = FileResponse(file, content_type='application/force-download')
+        response['Content-Disposition'] = f'attachment; filename="{str(dataset.dataset)}"'
+        return response
+    else:
+        return redirect("app:datasets")
+ 
 
 @login_required
 def training(request, dataset_id):

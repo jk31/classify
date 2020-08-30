@@ -7,6 +7,7 @@ urlpatterns = [
     path("", views.home, name="home"),
     path("datasets", views.datasets, name="datasets"),
     path("datasets/delete/<int:dataset_id>", views.dataset_delete, name="dataset_delete"),
+    path("datasets/download/<int:dataset_id>", views.dataset_download, name="dataset_download"),
     path("training/<int:dataset_id>", views.training, name="training"),
     path("models", views.models, name="models"),
     path("models/delete/<int:model_id>", views.model_delete, name="model_delete"),
