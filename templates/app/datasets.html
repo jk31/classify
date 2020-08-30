@@ -21,7 +21,8 @@
 {% if datasets %}
     <h2>Your datasets</h2>
     {% for dataset in datasets %}
-        <p>{{ dataset.name }} - {{ dataset.created }} - 
+        <p>{{ dataset.name }} - {{ dataset.created|date:"D d M Y - g:i a" }}
+            <button></button>
             <a href="{% url 'app:training' dataset_id=dataset.pk %}">Train a model</a>
             <form action="{% url 'app:dataset_delete' dataset_id=dataset.pk%}" method="post">
                 {% csrf_token %}

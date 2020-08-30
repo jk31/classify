@@ -13,7 +13,7 @@
 
 {% if models %}
     {% for model in models %}
-        <p>{{ model.dataset }} - {{ model.created }}</p>
+        <p>{{ model.dataset }} - {{ model.created|date:"D d M Y - g:i a" }}</p>
         <a href="{% url 'app:predict' model_id=model.pk %}">Use model for predictions</a>
         <form action="{% url 'app:model_delete' model_id=model.pk%}" method="post">
             {% csrf_token %}
@@ -22,6 +22,7 @@
     {% endfor %}
 {% else %}
     <h2>You haven't saved any models yet.</h2>
+    Select one of your <a href="{% url 'app:datasets' %}">datasets</a> to create a model.
 {% endif %}
 
 {% endblock %}
