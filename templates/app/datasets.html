@@ -28,16 +28,15 @@
         <div class="row">
             {% for dataset in datasets %}
                 <div class="col-lg-4">
-                    <div class="card p-2 m-2 shadow-sm">
-                        <h3>{{ dataset.name }}</h3>
-                        <span>Uploaded: {{ dataset.created|date:"D d M Y - g:i a" }}</span>
-                        
-                        <div class="btn-group center my-2" role="group" aria-label="Dataset actions">
-                            <a href="{% url 'app:training' dataset_id=dataset.pk %}"><span class="btn btn-outline-dark mr-1">Train</span></a>
-                            <a href="{% url 'app:dataset_download' dataset_id=dataset.pk %}"><span class="btn btn-outline-dark mx-1">Download</span></a>
+                    <div class="card shadow-sm my-2">
+                        <h3 class="card-header">{{ dataset.name }}</h3>
+                        <div class="card-body">
+                            <p class="card-text">Uploaded:<br> {{ dataset.created|date:"D d M Y - g:i a" }}</p>
+                            <a class="btn btn-outline-dark" type="button" href="{% url 'app:training' dataset_id=dataset.pk %}">Use for training</a>
+                            <a class="btn btn-outline-dark" type="button" href="{% url 'app:dataset_download' dataset_id=dataset.pk %}">Download</a>
                             <form action="{% url 'app:dataset_delete' dataset_id=dataset.pk%}" method="post">
                                 {% csrf_token %}
-                                <button class="btn btn-outline-danger mx-1" type="submit">Delete</button>
+                                <button class="btn btn-outline-danger mt-2" type="submit">Delete</button>
                             </form>
                         </div>
                     </div>
