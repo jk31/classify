@@ -11,27 +11,42 @@
 
 {% block content %}
 
-<h2>Upload new dataset</h2>
-<form action="" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ datasetuploadform|crispy }}
-    <input type="submit" value="Upload">
-</form>
+<section class="upload jumbotron text-center">
+    <div class="container">
+        <h1 class="jumbotron-heading">Upload a new dataset</h1>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ datasetuploadform }}
+            <input type="submit" value="Upload">
+        </form>
+    </div>
+</section>
 
-{% if datasets %}
-    <h2>Your datasets</h2>
-    {% for dataset in datasets %}
-        <p>{{ dataset.name }} - {{ dataset.created|date:"D d M Y - g:i a" }}
-            <a href="{% url 'app:dataset_download' dataset_id=dataset.pk %}">Download dataset</a>
-            <a href="{% url 'app:training' dataset_id=dataset.pk %}">Train a model</a>
-            <form action="{% url 'app:dataset_delete' dataset_id=dataset.pk%}" method="post">
-                {% csrf_token %}
-                <input type="submit" value="Delete">
-            </form>
-        </p>    
-    {% endfor %}
-{% else %}
-    <h2>You have no datasets yet...</h2>
-{% endif %}
+<section class="container">
+    {% if datasets %}
+        <h2>Your datasets</h2>
+        <div class="row">
+            {% for dataset in datasets %}
+                <div class="col-lg-4">
+                    <div class="card p-2 m-2 shadow-sm">
+                        <h3>{{ dataset.name }}</h3>
+                        <span>Uploaded: {{ dataset.created|date:"D d M Y - g:i a" }}</span>
+                        
+                        <div class="btn-group center my-2" role="group" aria-label="Dataset actions">
+                            <a href="{% url 'app:training' dataset_id=dataset.pk %}"><span class="btn btn-outline-dark mr-1">Train</span></a>
+                            <a href="{% url 'app:dataset_download' dataset_id=dataset.pk %}"><span class="btn btn-outline-dark mx-1">Download</span></a>
+                            <form action="{% url 'app:dataset_delete' dataset_id=dataset.pk%}" method="post">
+                                {% csrf_token %}
+                                <button class="btn btn-outline-danger mx-1" type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h2 class="jumbotron-heading">You have no datasets yet...</h2>
+    {% endif %}
+</section>
 
 {% endblock %}
