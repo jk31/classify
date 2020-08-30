@@ -15,6 +15,7 @@
     {% for model in models %}
         <p>{{ model.dataset }} - {{ model.created|date:"D d M Y - g:i a" }}</p>
         <a href="{% url 'app:predict' model_id=model.pk %}">Use model for predictions</a>
+        <a href="{% url 'app:model_download' model_id=model.pk %}">Download model</a>
         <form action="{% url 'app:model_delete' model_id=model.pk%}" method="post">
             {% csrf_token %}
             <input type="submit" value="Delete">

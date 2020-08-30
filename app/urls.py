@@ -11,6 +11,7 @@ urlpatterns = [
     path("training/<int:dataset_id>", views.training, name="training"),
     path("models", views.models, name="models"),
     path("models/delete/<int:model_id>", views.model_delete, name="model_delete"),
+    path("model/download/<int:model_id>", views.model_download, name="model_download"),
     path("save-model", views.save_model, name="save_model"),
     path("predict/<int:model_id>", views.predict, name="predict"),
 ]

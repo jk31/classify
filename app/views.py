@@ -60,7 +60,7 @@ def datasets(request):
 @login_required
 def dataset_delete(request, dataset_id):
     if request.method == "POST":
-        dataset = Dataset.objects.get(pk=dataset_id)
+        dataset = get_object_or_404(Dataset, pk=dataset_id)
         if dataset.owner == request.user:
             dataset.dataset.delete()
             dataset.delete()
@@ -70,7 +70,7 @@ def dataset_delete(request, dataset_id):
 
 @login_required
 def dataset_download(request, dataset_id):
-    dataset = Dataset.objects.get(pk=dataset_id)
+    dataset = get_object_or_404(Dataset, pk=dataset_id)
     if dataset.owner == request.user:
         file = open(MEDIA_ROOT + "/" + str(dataset.dataset), "rb")
         response = FileResponse(file, content_type='application/force-download')
@@ -167,16 +167,6 @@ def save_model(request):
             return redirect("app:training")
 
 @login_required
-def model_delete(request, model_id):
-    if request.method == "POST":
-        model = ClassificationModel.objects.get(pk=model_id)
-        if model.owner == request.user:
-            model.trained_model.delete()
-            model.delete()
-            messages.success(request, "Model deleted.")
-    return redirect("app:models")
-
-@login_required
 def models(request):
     context = {
         "models": None
@@ -184,6 +174,31 @@ def models(request):
     models = ClassificationModel.objects.filter(owner=request.user, saved=True)
     context["models"] = models
     return render(request, "app/models.html", context)
+
+
+@login_required
+def model_delete(request, model_id):
+    if request.method == "POST":
+        model = get_object_or_404(ClassificationModel, pk=model_id)
+        if model.owner == request.user:
+            model.trained_model.delete()
+            model.delete()
+            messages.success(request, "Model deleted.")
+    return redirect("app:models")
+
+
+@login_required
+def model_download(request, model_id):
+    model = get_object_or_404(ClassificationModel, pk=model_id)
+    if model.owner == request.user:
+        file = open(str(model.trained_model), "rb")
+        response = FileResponse(file, content_type='application/force-download')
+        print(str(model.trained_model))
+        response['Content-Disposition'] = f'attachment; filename="{str(model.dataset)}-{str(model.created)}.joblib"'
+        return response
+    else:
+        return redirect("app:models")
+
 
 @login_required 
 def predict(request, model_id):
