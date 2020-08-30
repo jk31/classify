@@ -154,6 +154,15 @@ def save_model(request):
         else:
             return redirect("app:training")
 
+@login_required
+def model_delete(request, model_id):
+    if request.method == "POST":
+        model = ClassificationModel.objects.get(pk=model_id)
+        if model.owner == request.user:
+            model.trained_model.delete()
+            model.delete()
+            messages.success(request, "Model deleted.")
+    return redirect("app:models")
 
 @login_required
 def models(request):
