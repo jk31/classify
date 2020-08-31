@@ -18,11 +18,13 @@ class DatasetUploadForm(forms.ModelForm):
 class TrainingForm(forms.Form):
     def __init__(self, columns, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.label_suffix = ""
 
         choices = tuple([(col, col) for col in columns])
         #  if columns[col] == "Choice"
         field = forms.ChoiceField(choices=choices)
         self.fields["goal"] = field
+        self.fields["goal"].label = "What do you want to predict?"
         
         for col in columns:
             field = forms.BooleanField(widget=forms.CheckboxInput, required=False)

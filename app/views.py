@@ -49,7 +49,7 @@ def datasets(request):
                 new_dataset.save()
                 messages.success(request, "Your dataset has been uploaded..")
             except:
-                messages.error(request, "Your dataset is not suitable.")
+                messages.warning(request, "Your dataset is not suitable.")
     else:
         datasetuploadform = DatasetUploadForm()
         
@@ -113,14 +113,14 @@ def training(request, dataset_id):
             #TODO make this not possible in the frontend
             if goal in checkboxes:
                 checkboxes.remove(goal)
-                messages.error(request, f"Your selected goal '{goal}' was in the selected variables. It was ommited in the training process.")
+                messages.warning(request, f"Your selected goal '{goal}' was in the selected variables. It was ommited in the training process.")
 
             # check if columns and goal in df, very unlikely, 
             #TODO put this all in train_model?
             column_with_type = data_checkboxes_in_columns(dataset.dataset, checkboxes)
             goal = data_goal_in_columns(dataset.dataset, goal)
             if (column_with_type == False) or (goal == False):
-                messages.error(request, "It seems like your selection does not align with the provided dataset.")
+                messages.warning(request, "It seems like your selection does not align with the provided dataset.")
                 return render(request, "app/training.html", context)
 
             # refill form
@@ -128,7 +128,7 @@ def training(request, dataset_id):
 
             train_results = train_model(request, dataset.dataset, column_with_type, goal)
             if train_results == False:
-                messages.error(request, "Something went wrong during the training.")
+                messages.warning(request, "Something went wrong during the training.")
                 return render(request, "app/training.html", context)
             else:
                 model_pk, training_acc, test_acc = train_results

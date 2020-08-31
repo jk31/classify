@@ -32,7 +32,7 @@ if "PRODUCTION" in os.environ:
         CSRF_COOKIE_SECURE = True
         SESSION_COOKIE_SECURE = True
 else:
-    DEBUG = False #change back
+    DEBUG = True # change back
     SECURE_SSL_REDIRECT = False
     CSRF_COOKIE_SECURE = False
     SESSION_COOKIE_SECURE = False

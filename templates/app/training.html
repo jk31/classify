@@ -27,10 +27,29 @@
 {% endif %}
 
 
-<form action="" method="POST">
-    {% csrf_token %}
-    {{ trainingform|crispy }}
-    <input type="submit" value="Train model">
-</form>
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            {% for field in trainingform %}
+                {% if field.label == "What do you want to predict?" %}
+                    <div class="col-md-12 d-flex justify-content-center">
+                        <div class="d-flex flex-column align-items-center">
+                            {{ field.errors }} 
+                            {{ field.label_tag }} {{ field }}
+                            <p class="mt-4">Which variabes do you use for the prediction?</p>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col-md-3 d-flex flex-column align-items-center mb-2">
+                        {{ field.errors }}
+                        {{ field.label_tag }} {{ field }}
+                    </div> 
+                {% endif %}
+            {% endfor %}
+        </div>
+        <input class="btn btn-outline-primary btn-lg mt-4" type="submit" value="Train model">
+    </form>
+
 
 {% endblock %}

@@ -18,7 +18,7 @@
                 <label style="font-size: 2.5em;" for="{{ field.auto_id }}">Upload a new dataset</label> <br>
                 {{ field }} <br>
             {% endfor %}
-            <input class="btn btn-success mt-2" type="submit" value="Upload">
+            <input class="btn btn-outline-success mt-2" type="submit" value="Upload">
         </form>
     </div>
 </section>
@@ -52,8 +52,8 @@
                             {% endif %}
                             
                             <div style="clear:both"></div>
+
                             <a class="btn btn-outline-dark mt-1" type="button" href="{% url 'app:dataset_download' dataset_id=dataset.pk %}">Download</a>
- 
                             <form action="{% url 'app:dataset_delete' dataset_id=dataset.pk%}" method="post">
                                 {% csrf_token %}
                                 <input class="btn btn-outline-danger mt-1" type="submit" value="Delete"></input>

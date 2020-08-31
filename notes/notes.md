@@ -8,10 +8,9 @@
     * make new view for demo that does not require login
 
 ## Frontend
-* make 404 and other error pages
-    * reset DEBUG = TRUE in settings.py
 * landing page
 * form styling
+    * for model success make a container with a background like a jumbotron
 * instructions for dataset requirements
 * remove not needed crispy tags
 
