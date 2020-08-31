@@ -32,11 +32,30 @@
                         <h3 class="card-header">{{ dataset.name }}</h3>
                         <div class="card-body">
                             <p class="card-text">Uploaded:<br> {{ dataset.created|date:"D d M Y - g:i a" }}</p>
-                            <a class="btn btn-outline-dark" type="button" href="{% url 'app:training' dataset_id=dataset.pk %}">Use for training</a>
-                            <a class="btn btn-outline-dark" type="button" href="{% url 'app:dataset_download' dataset_id=dataset.pk %}">Download</a>
+                            
+                            <a class="btn btn-outline-dark mt-1" type="button" href="{% url 'app:training' dataset_id=dataset.pk %}">Use for training</a>
+                            
+                            {% if dataset.models.all %}
+                                <button class="btn btn-outline-dark mt-1" data-toggle="collapse" href="#collapse-{{ dataset.pk }}" role="button" aria-expanded="false" aria-controls="collapseModels">
+                                    Show models
+                                </button>
+                                <div class="collapse" id="collapse-{{ dataset.pk }}">   
+                                    {% for model in dataset.models.all %}
+                                        {% if model.saved %}
+                                            <div class="card card-body my-2">
+                                                <a href="{% url 'app:predict' model_id=model.pk %}">Model for <em>{{ model.goal }}</em><br><small>Created: {{ model.created|date:"D d M Y - g:i a"}}</small></a>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            
+                            <div style="clear:both"></div>
+                            <a class="btn btn-outline-dark mt-1" type="button" href="{% url 'app:dataset_download' dataset_id=dataset.pk %}">Download</a>
+ 
                             <form action="{% url 'app:dataset_delete' dataset_id=dataset.pk%}" method="post">
                                 {% csrf_token %}
-                                <button class="btn btn-outline-danger mt-2" type="submit">Delete</button>
+                                <button class="btn btn-outline-danger mt-1" type="submit">Delete</button>
                             </form>
                         </div>
                     </div>
