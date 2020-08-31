@@ -26,21 +26,21 @@ SECRET_KEY = os.environ.get("SECRET_KEY", '875fef88b182ecb3040baf6a54960b78c7808
 # SECURITY WARNING: don't run with debug turned on in production!
 if "PRODUCTION" in os.environ:
     if os.environ["PRODUCTION"] == "1":
+        ALLOWED_HOSTS = []
         DEBUG = False
         SECURE_SSL_REDIRECT = True
         CSRF_COOKIE_SECURE = True
         SESSION_COOKIE_SECURE = True
 else:
-    DEBUG = True
+    DEBUG = False #change back
     SECURE_SSL_REDIRECT = False
     CSRF_COOKIE_SECURE = False
     SESSION_COOKIE_SECURE = False
+    ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 
 EMAIL_USERNAME = os.environ["EMAIL_USERNAME"]
 EMAIL_PASSWORD = os.environ["EMAIL_PASSWORD"]
-
-ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -165,13 +165,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
-# Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
