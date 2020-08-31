@@ -11,19 +11,34 @@
 
 {% block content %}
 
-{% if models %}
-    {% for model in models %}
-        <p>{{ model.dataset }} - {{ model.created|date:"D d M Y - g:i a" }}</p>
-        <a href="{% url 'app:predict' model_id=model.pk %}">Use model for predictions</a>
-        <a href="{% url 'app:model_download' model_id=model.pk %}">Download model</a>
-        <form action="{% url 'app:model_delete' model_id=model.pk%}" method="post">
-            {% csrf_token %}
-            <input type="submit" value="Delete">
-        </form>
-    {% endfor %}
-{% else %}
-    <h2>You haven't saved any models yet.</h2>
-    Select one of your <a href="{% url 'app:datasets' %}">datasets</a> to create a model.
-{% endif %}
+<section class="container">
+    {% if models %}
+        <h2>Your models</h2>
+        <div class="row">
+            {% for model in models %}
+                <div class="col-lg-4">
+                    <div class="card shadow-sm my-2">
+                        <h3 class="card-header">{{ model.dataset }}</h3>
+                        <div class="card-body">
+                            <p class="card-text">Created:<br> {{ model.created|date:"D d M Y - g:i a" }}</p>
+                            
+                            <a class="btn btn-outline-dark mt-1" type="button" href="{% url 'app:predict' model_id=model.pk %}">Use for predictions</a>
+                            
+                            <a class="btn btn-outline-dark mt-1" type="button" href="{% url 'app:model_download' model_id=model.pk %}">Download model</a>
+ 
+                            <form action="{% url 'app:model_delete' model_id=model.pk%}" method="post">
+                                {% csrf_token %}
+                                <input class="btn btn-outline-danger mt-1" type="submit" value="Delete"></input>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h2>You haven't saved any models yet.</h2>
+        Select one of your <a href="{% url 'app:datasets' %}">datasets</a> to create a model.
+    {% endif %}
+</section>
 
 {% endblock %}
