@@ -13,11 +13,13 @@
 
 <section class="upload jumbotron text-center">
     <div class="container">
-        <h1 class="jumbotron-heading">Upload a new dataset</h1>
         <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ datasetuploadform }}
-            <input type="submit" value="Upload">
+            {% for field in datasetuploadform %}
+                <label style="font-size: 2.5em;" for="{{ field.auto_id }}">Upload a new dataset</label> <br>
+                {{ field }} <br>
+            {% endfor %}
+            <input class="btn btn-success mt-2" type="submit" value="Upload">
         </form>
     </div>
 </section>
@@ -55,7 +57,7 @@
  
                             <form action="{% url 'app:dataset_delete' dataset_id=dataset.pk%}" method="post">
                                 {% csrf_token %}
-                                <button class="btn btn-outline-danger mt-1" type="submit">Delete</button>
+                                <input class="btn btn-outline-danger mt-1" type="submit" value="Delete"></input>
                             </form>
                         </div>
                     </div>
