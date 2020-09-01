@@ -12,44 +12,59 @@
 
 <h1>Training</h1>
 
-<p>{{ dataset.name }} - {{ dataset.created }}</p>
+<p>Dataset:<br>{{ dataset.name }} - {{ dataset.created }}</p>
 
-{% if training_acc and test_acc %}
-    <p>Training Accuracy: <b>{{ training_acc }}%</b> - Test Accuracy <b>{{ test_acc }}%</b></p>
-{% endif %}
-
-{% if training_acc %}
-<form action="/save-model" method="POST">
-    {% csrf_token %}
-    {{ savemodelform|crispy }}
-    <input type="submit" value="Save model">
-</form>
-{% endif %}
-
-
-
-    <form action="" method="POST">
-        {% csrf_token %}
+{% if new_model %}
+    <div class="jumbotron">
         <div class="row">
-            {% for field in trainingform %}
-                {% if field.label == "What do you want to predict?" %}
-                    <div class="col-md-12 d-flex justify-content-center">
-                        <div class="d-flex flex-column align-items-center">
-                            {{ field.errors }} 
-                            {{ field.label_tag }} {{ field }}
-                            <p class="mt-4">Which variabes do you use for the prediction?</p>
-                        </div>
-                    </div>
-                {% else %}
-                    <div class="col-md-3 d-flex flex-column align-items-center mb-2">
-                        {{ field.errors }}
-                        {{ field.label_tag }} {{ field }}
-                    </div> 
-                {% endif %}
-            {% endfor %}
+            <div class="col-md-4">
+                <h2>Training Evaluation</h2>
+                Training Accuracy: <b>{{ new_model.training_acc|floatformat:2 }}%</b>
+                <br>
+                Test Accuracy <b>{{ new_model.test_acc|floatformat:2 }}%</b>
+            </div>
+            <div class="col-md-4">
+                <h2>Model variables</h2>
+                <div class="row d-flex">
+                    {% for var in new_model.training_columns.training_columns %}
+                        <div class="col-md-4">{{ var }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h2>Prediction Goal</h2>
+                <p>{{ new_model.goal }}</p>
+            </div>
         </div>
-        <input class="btn btn-outline-primary btn-lg mt-4" type="submit" value="Train model">
-    </form>
+        <form action="/save-model" method="POST">
+            {% csrf_token %}
+            {{ savemodelform|crispy }}
+            <input class="btn btn-outline-success mt-4" type="submit" value="Save model">
+        </form>
+    </div>
+{% endif %}
 
-
+<form action="" method="POST">
+    {% csrf_token %}
+    <div class="row">
+        {% for field in trainingform %}
+            {% if field.label == "What do you want to predict?" %}
+                <div class="col-md-12 d-flex justify-content-center">
+                    <div class="d-flex flex-column align-items-center">
+                        {{ field.errors }}
+                        {{ field.label_tag }}
+                        {{ field }}
+                        <p class="mt-4">Which variabes do you use for the prediction?</p>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-md-2 d-flex flex-column align-items-center mb-2">
+                    {{ field.errors }}
+                    {{ field.label_tag }} {{ field }}
+                </div> 
+            {% endif %}
+        {% endfor %}
+    </div>
+    <input class="btn btn-outline-primary mt-4" type="submit" value="Train model">
+</form>
 {% endblock %}

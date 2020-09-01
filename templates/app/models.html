@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load app_extras %}
 {% load crispy_forms_tags %}
 {% load static %}
 
@@ -15,7 +16,7 @@
     {% if models %}
         <h2>Your models</h2>
         <div class="row">
-            {% for model in models %}
+            {% for model in models|saved_only %}
                 <div class="col-lg-4">
                     <div class="card shadow-sm my-2">
                         <h3 class="card-header">{{ model.dataset }}</h3>

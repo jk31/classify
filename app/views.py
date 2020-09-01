@@ -87,8 +87,7 @@ def training(request, dataset_id):
         "trainingform": None,
         "savemodelform": None,
         "dataset_columns": None,
-        "training_acc": None,
-        "test_acc": None,
+        "new_model": None,
     }
     
     dataset = get_object_or_404(Dataset, pk=dataset_id)
@@ -131,14 +130,14 @@ def training(request, dataset_id):
                 messages.warning(request, "Something went wrong during the training.")
                 return render(request, "app/training.html", context)
             else:
-                model_pk, training_acc, test_acc = train_results
-                messages.success(request, "Training was succesful.")
-            
-            context["training_acc"] = round(training_acc, 5) * 100
-            context["test_acc"] = round(test_acc, 5) * 100
+                model_pk = train_results
+                new_model = get_object_or_404(ClassificationModel, pk=model_pk)
+                context["new_model"] = new_model
+                savemodelform = SaveModelForm(initial={"model_pk": model_pk})
+                context["savemodelform"] = savemodelform
 
-            savemodelform = SaveModelForm(initial={"model_pk": model_pk})
-            context["savemodelform"] = savemodelform
+                messages.success(request, "Training was succesful.")
+
     return render(request, "app/training.html", context)
 
 @login_required

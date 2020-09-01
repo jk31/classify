@@ -14,6 +14,7 @@
     * for model success make a container with a background like a jumbotron
 * instructions for dataset requirements
 * remove not needed crispy tags
+* make scrollbar always visible because it shakes when activated with show columns? or is there a way to account for it in the base layout
 
 ## DevOps
 * find domain

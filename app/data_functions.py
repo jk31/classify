@@ -95,7 +95,7 @@ def train_model(request, dataset, column_with_type, goal):
 
         new_model.save()
         
-        return new_model.pk, training_acc, test_acc,
+        return new_model.pk
     except:
         return False
     
