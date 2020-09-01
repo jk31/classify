@@ -13,6 +13,8 @@
 * instructions for dataset requirements
 * make scrollbar always visible because it shakes when activated with show columns? or is there a way to account for it in the base layout
 * select all variables for training
+* footer?
+* password reset etc pages?
 
 ## DevOps
 * find domain
