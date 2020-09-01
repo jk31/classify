@@ -1,22 +1,17 @@
-from django.conf import settings
+import re
+import uuid
 
+from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, FileResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-import re
-import uuid
-
 import pandas as pd
 
 from app.forms import DatasetUploadForm, TrainingForm, SaveModelForm, PredictForm
 from app.models import Dataset, ClassificationModel
-
-from app.data_functions import dataset_columns, data_checkboxes_in_columns, data_goal_in_columns, train_model, prediction, bugger
-
-step=0
-
+from app.data_functions import dataset_columns, data_checkboxes_in_columns, data_goal_in_columns, train_model, prediction
 
 MEDIA_ROOT = settings.MEDIA_ROOT
 
@@ -206,6 +201,7 @@ def predict(request, model_id):
         "model": None,
         "predictform": None,
         "predictionresult": None,
+        "input": None,
     }
 
     model = get_object_or_404(ClassificationModel, pk=model_id)
@@ -223,6 +219,10 @@ def predict(request, model_id):
             prediction_result = prediction(cd, model)
             context["predictionresult"] = prediction_result
             context["predictform"] = predictform
-            
+            context["input"] = cd
+            messages.success(request, "Prediction successful.")
+        else:
+            messages.warning(request, "Something went wrong with the prediction.")
+      
     return render(request, "app/predict.html", context)
     

@@ -7,6 +7,7 @@
     * clean heart or churn datasets with better column names
 * demo
     * make new view for demo that does not require login
+* history of predictions?
 
 ## Frontend
 * landing page

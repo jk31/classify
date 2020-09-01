@@ -11,17 +11,40 @@
 
 {% block content %}
 
-<h2>Make prediction for <em>{{ model.goal }}</em></h2>
+<h1>Prediction</h1>
+<p>Model:<br>{{ model.dataset }} - {{ model.created }}</p>
 
 {% if predictionresult %}
-    <h3>Prediction result:</h3>
-    {{ predictionresult }}
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-md-4 pt-sm-3 pt-md-0 pt-lg-0 pt-xl-0">
+                <h2>Prediction for <em>{{ model.goal }}</em>:</h2>
+                {{ predictionresult }}
+            </div>
+            <div class="col-md-8 pt-sm-3 pt-md-0 pt-lg-0 pt-xl-0">
+                <h2>Prediction Input</h2>
+                <div class="row d-flex">
+                    {% for key, value in input.items %}
+                        <div class="col-md-2">{{ key }}: {{ value }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+    </div>
 {% endif %}
 
 <form action="" method="POST">
     {% csrf_token %}
-    {{ predictform|crispy }}
-    <input type="submit" value="Predict">
+    <div class="row">
+        {% for field in predictform %}
+            <div class="col-md-3 d-flex flex-column">
+                {{ field.errors }}
+                {{ field.label_tag }} {{ field }}
+            </div>
+        {% endfor %}
+    </div>
+    <input class="btn btn-outline-primary mt-4" type="submit" value="{% if predictionresult %} Re-Predict {% else %} Predict {% endif %}">
 </form>
 
 {% endblock %}

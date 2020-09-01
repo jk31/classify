@@ -1,13 +1,13 @@
-from django.conf import settings
-
 import re
+from joblib import dump, load
 
 import pandas as pd
 from sklearn import tree
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
-from joblib import dump, load
+from django.conf import settings
+
 from app.models import Dataset, ClassificationModel
 
 MEDIA_ROOT = settings.MEDIA_ROOT
@@ -56,7 +56,7 @@ def data_goal_in_columns(dataset, goal):
 
 
 def train_model(request, dataset, column_with_type, goal):
-    '''Train the model and save it, also takes care of the deletion of not saved models'''
+    """Train the model and save it, also takes care of the deletion of not saved models"""
     try:
         df = pd.read_excel(f"{MEDIA_ROOT}/{dataset}")
         # keep only variables and goal
@@ -103,17 +103,22 @@ def train_model(request, dataset, column_with_type, goal):
 def prediction(cd, model):
     '''Make prediction and return result'''
 
-    df_cd = pd.DataFrame([cd])
+    try:
+        df_cd = pd.DataFrame([cd])
 
-    training_columns = model.training_columns
-    
-    df_predict = pd.DataFrame(columns=training_columns["training_columns"])
-    df_predict = df_predict.append(pd.get_dummies(df_cd))
-    df_predict = df_predict.fillna(0)
+        training_columns = model.training_columns
+        
+        df_predict = pd.DataFrame(columns=training_columns["training_columns"])
+        df_predict = df_predict.append(pd.get_dummies(df_cd))
+        df_predict = df_predict.fillna(0)
 
-    prediction_model = load(f"{model.trained_model}")
-    prediction = prediction_model.predict(df_predict.iloc[0,:].values.reshape(1, -1))
+        prediction_model = load(f"{model.trained_model}")
+        prediction = prediction_model.predict(df_predict.iloc[0,:].values.reshape(1, -1))
+        
+        return str(prediction[0])
+    except:
+        messages.warning(request, "Something went wrong with the prediction.")
 
-    return str(prediction[0])
+
 
 

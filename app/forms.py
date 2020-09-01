@@ -1,3 +1,5 @@
+from crispy_forms.helper import FormHelper
+
 from django import forms
 from django.forms import BaseFormSet
 
@@ -39,6 +41,9 @@ class SaveModelForm(forms.Form):
 class PredictForm(forms.Form):
     def __init__(self, variables, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        helper = FormHelper()
+        
         for var in variables:
             if variables[var] == "Numerical":
                 field = forms.FloatField(required=True)
