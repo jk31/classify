@@ -101,8 +101,7 @@ def train_model(request, dataset, column_with_type, goal):
     
 
 def prediction(cd, model):
-    '''Make prediction and return result'''
-
+    """Make prediction and return result"""
     try:
         df_cd = pd.DataFrame([cd])
 

@@ -7,11 +7,11 @@ from app.models import Dataset
 
 
 class DatasetUploadForm(forms.ModelForm):
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-    #     for visible in self.visible_fields():
-    #         visible.field.widget.attrs['class'] = 'form-control'
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'upload-dataset-form'
             
     class Meta:
         model = Dataset

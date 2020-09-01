@@ -6,12 +6,19 @@ main {
   padding: 20px;
 }
 
-input[type="checkbox"]
-{
-  /* Double-sized Checkboxes */
-  -ms-transform: scale(1.5); /* IE */
-  -moz-transform: scale(1.5); /* FF */
-  -webkit-transform: scale(1.5); /* Safari and Chrome */
-  -o-transform: scale(1.5); /* Opera */
-  transform: scale(1.5);
+
+.upload-dataset-form {
+  /* Slightly adjusted 'form-group' of Bootstrap */
+  width: 30%;
+  height: calc(1.5em + 0.75rem + 7px);
+  padding: .375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }

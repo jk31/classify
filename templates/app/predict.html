@@ -11,18 +11,18 @@
 
 {% block content %}
 
-<h1>Prediction</h1>
+<h1>Prediction for <em>{{ model.goal }}</em></h1>
 <p>Model:<br>{{ model.dataset }} - {{ model.created }}</p>
 
 {% if predictionresult %}
     <div class="jumbotron">
         <div class="row">
             <div class="col-md-4 pt-sm-3 pt-md-0 pt-lg-0 pt-xl-0">
-                <h2>Prediction for <em>{{ model.goal }}</em></h2>
+                <h2>Result</em></h2>
                 {{ predictionresult }}
             </div>
             <div class="col-md-8 pt-sm-3 pt-md-0 pt-lg-0 pt-xl-0">
-                <h2>Prediction Input</h2>
+                <h2>Input</h2>
                 <div class="row d-flex">
                     {% for key, value in input.items %}
                         <div class="col-md-2">{{ key }}: {{ value }}</div>
