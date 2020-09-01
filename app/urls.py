@@ -5,6 +5,7 @@ from . import views
 app_name = "app"
 urlpatterns = [
     path("", views.home, name="home"),
+    path("demo-heart", views.demo_heart, name="demo_heart"),
     path("datasets", views.datasets, name="datasets"),
     path("datasets/delete/<int:dataset_id>", views.dataset_delete, name="dataset_delete"),
     path("datasets/download/<int:dataset_id>", views.dataset_download, name="dataset_download"),

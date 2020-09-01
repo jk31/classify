@@ -11,21 +11,26 @@
 
 {% block content %}
 
-<h1>Prediction for <em>{{ model.goal }}</em></h1>
-<p>Model:<br>{{ model.dataset }} - {{ model.created }}</p>
+{% if request.get_full_path == "/demo-heart" %}
+    <h1>Demo Prediction for <em>{{ model.goal }}</em></h1>
+    <a class="btn btn-outline-dark my-2" type="button" href="{% url 'app:dataset_download' dataset_id=18 %}">Download Demo Dataset</a>
+{% else %}
+    <h1>Prediction for <em>{{ model.goal }}</em></h1>
+    <p>Model:<br>{{ model.dataset }} - {{ model.created }}</p>
+{% endif %}
 
 {% if predictionresult %}
     <div class="jumbotron">
         <div class="row">
             <div class="col-md-4 pt-sm-3 pt-md-0 pt-lg-0 pt-xl-0">
                 <h2>Result</em></h2>
-                {{ predictionresult }}
+                <u>{{ model.goal }}</u>: {{ predictionresult }}
             </div>
             <div class="col-md-8 pt-sm-3 pt-md-0 pt-lg-0 pt-xl-0">
                 <h2>Input</h2>
                 <div class="row d-flex">
                     {% for key, value in input.items %}
-                        <div class="col-md-2">{{ key }}: {{ value }}</div>
+                        <div class="col-md-3 mb-2"><u>{{ key }}</u>:<br>{{ value }}</div>
                     {% endfor %}
                 </div>
             </div>

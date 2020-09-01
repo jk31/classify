@@ -19,6 +19,35 @@ MEDIA_ROOT = settings.MEDIA_ROOT
 def home(request):
     return render(request, "app/home.html")
 
+def demo_heart(request):
+    context = {
+        "model": None,
+        "predictform": None,
+        "predictionresult": None,
+        "input": None,
+    }
+
+    model = get_object_or_404(ClassificationModel, pk=69)
+    context["model"] = model
+
+    predictform = PredictForm(model.variables)
+    context["predictform"] = predictform
+
+    if request.method == "POST":
+        predictform = PredictForm(model.variables, request.POST)
+        if predictform.is_valid():
+            cd = predictform.cleaned_data
+            prediction_result = prediction(cd, model)
+            if prediction_result == False:
+                messages.warning(request, "Something went wrong with the prediction.")
+            else:
+                context["predictionresult"] = prediction_result
+                context["predictform"] = predictform
+                context["input"] = cd
+        else:
+            messages.warning(request, "Something went wrong with the prediction.")
+      
+    return render(request, "app/predict.html", context)
 
 @login_required
 def datasets(request):
@@ -223,7 +252,6 @@ def predict(request, model_id):
                 context["predictionresult"] = prediction_result
                 context["predictform"] = predictform
                 context["input"] = cd
-                messages.success(request, "Prediction successful.")
         else:
             messages.warning(request, "Something went wrong with the prediction.")
       
