@@ -9,8 +9,9 @@ from app.models import Dataset
 class DatasetUploadForm(forms.ModelForm):
     # def __init__(self, *args, **kwargs):
     #     super().__init__(*args, **kwargs)
+
     #     for visible in self.visible_fields():
-    #         visible.field.widget.attrs["class"] = "btn btn-success"
+    #         visible.field.widget.attrs['class'] = 'form-control'
             
     class Meta:
         model = Dataset
@@ -20,6 +21,7 @@ class DatasetUploadForm(forms.ModelForm):
 class TrainingForm(forms.Form):
     def __init__(self, columns, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
         self.label_suffix = ""
 
         choices = tuple([(col, col) for col in columns])

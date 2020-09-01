@@ -36,7 +36,7 @@
 
 <form action="" method="POST">
     {% csrf_token %}
-    <div class="row form-group">
+    <div class="row">
         {% for field in predictform %}
             <div class="col-md-3 d-flex flex-column">
                 {{ field.errors }}

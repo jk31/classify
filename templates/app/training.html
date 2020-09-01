@@ -18,21 +18,21 @@
 {% if new_model %}
     <div class="jumbotron">
         <div class="row">
-            <div class="col-md-4">
-                <h2>Training Evaluation</h2>
+            <div class="col-md-3">
+                <h2>Evaluation</h2>
                 Training Accuracy: <b>{{ new_model.training_acc|floatformat:2|to_100 }}%</b>
                 <br>
                 Test Accuracy <b>{{ new_model.test_acc|floatformat:2|to_100 }}%</b>
             </div>
-            <div class="col-md-4 pt-sm-3 pt-md-0 pt-lg-0 pt-xl-0">
+            <div class="col-md-6 pt-sm-3 pt-md-0 pt-lg-0 pt-xl-0">
                 <h2>Model Variables</h2>
                 <div class="row d-flex">
-                    {% for var in new_model.training_columns.training_columns %}
-                        <div class="col-md-4">{{ var }}</div>
+                    {% for var in new_model.variables %}
+                        <div class="col-md-4 mb-2">{{ var }}</div>
                     {% endfor %}
                 </div>
             </div>
-            <div class="col-md-4 pt-sm-3 pt-md-0 pt-lg-0 pt-xl-0">
+            <div class="col-md-3 pt-sm-3 pt-md-0 pt-lg-0 pt-xl-0">
                 <h2>Prediction Goal</h2>
                 <p>{{ new_model.goal }}</p>
             </div>
@@ -47,7 +47,7 @@
 
 <form action="" method="POST">
     {% csrf_token %}
-    <div class="row form-group">
+    <div class="row">
         {% for field in trainingform %}
             {% if field.label == "What do you want to predict?" %}
                 <div class="col-md-12 d-flex justify-content-center">
@@ -59,7 +59,7 @@
                     </div>
                 </div>
             {% else %}
-                <div class="col-sm-2 d-flex flex-column align-items-center mb-2">
+                <div class="col-sm-3 d-flex flex-column mb-2 justify-content-between align-items-center">
                     {{ field.errors }}
                     {{ field.label_tag }} {{ field }}
                 </div> 
