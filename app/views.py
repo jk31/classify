@@ -217,10 +217,13 @@ def predict(request, model_id):
         if predictform.is_valid():
             cd = predictform.cleaned_data
             prediction_result = prediction(cd, model)
-            context["predictionresult"] = prediction_result
-            context["predictform"] = predictform
-            context["input"] = cd
-            messages.success(request, "Prediction successful.")
+            if prediction_result == False:
+                messages.warning(request, "Something went wrong with the prediction.")
+            else:
+                context["predictionresult"] = prediction_result
+                context["predictform"] = predictform
+                context["input"] = cd
+                messages.success(request, "Prediction successful.")
         else:
             messages.warning(request, "Something went wrong with the prediction.")
       

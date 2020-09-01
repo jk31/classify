@@ -117,7 +117,7 @@ def prediction(cd, model):
         
         return str(prediction[0])
     except:
-        messages.warning(request, "Something went wrong with the prediction.")
+        return False
 
 
 

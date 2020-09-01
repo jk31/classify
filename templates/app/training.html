@@ -47,7 +47,7 @@
 
 <form action="" method="POST">
     {% csrf_token %}
-    <div class="row">
+    <div class="row form-group">
         {% for field in trainingform %}
             {% if field.label == "What do you want to predict?" %}
                 <div class="col-md-12 d-flex justify-content-center">
@@ -66,6 +66,6 @@
             {% endif %}
         {% endfor %}
     </div>
-    <input class="btn btn-outline-primary mt-4" type="submit" value="{% if new_model %} Re-Train Model {% else %} Train Model {% endif %}">
+    <input class="btn btn-outline-primary mt-2" type="submit" value="{% if new_model %} Re-Train Model {% else %} Train Model {% endif %}">
 </form>
 {% endblock %}

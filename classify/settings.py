@@ -60,8 +60,6 @@ INSTALLED_APPS = [
     'active_link',
 ]
 
-CRISPY_TEMPLATE_PACK = 'bootstrap3'
-
 SITE_ID = 1
 
 

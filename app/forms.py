@@ -33,6 +33,9 @@ class TrainingForm(forms.Form):
             self.fields[f"variable_{col}"] = field
             self.fields[f"variable_{col}"].label = col
 
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
 
 class SaveModelForm(forms.Form):
     model_pk = forms.IntegerField(widget = forms.HiddenInput(), required=True)
@@ -41,8 +44,6 @@ class SaveModelForm(forms.Form):
 class PredictForm(forms.Form):
     def __init__(self, variables, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        helper = FormHelper()
         
         for var in variables:
             if variables[var] == "Numerical":
@@ -52,3 +53,6 @@ class PredictForm(forms.Form):
                 choices = tuple([(x, x) for x in variables[var]])
                 field = forms.ChoiceField(choices=choices)
                 self.fields[var] = field
+        
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'

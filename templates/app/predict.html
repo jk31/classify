@@ -18,7 +18,7 @@
     <div class="jumbotron">
         <div class="row">
             <div class="col-md-4 pt-sm-3 pt-md-0 pt-lg-0 pt-xl-0">
-                <h2>Prediction for <em>{{ model.goal }}</em>:</h2>
+                <h2>Prediction for <em>{{ model.goal }}</em></h2>
                 {{ predictionresult }}
             </div>
             <div class="col-md-8 pt-sm-3 pt-md-0 pt-lg-0 pt-xl-0">
@@ -36,7 +36,7 @@
 
 <form action="" method="POST">
     {% csrf_token %}
-    <div class="row">
+    <div class="row form-group">
         {% for field in predictform %}
             <div class="col-md-3 d-flex flex-column">
                 {{ field.errors }}
@@ -44,7 +44,7 @@
             </div>
         {% endfor %}
     </div>
-    <input class="btn btn-outline-primary mt-4" type="submit" value="{% if predictionresult %} Re-Predict {% else %} Predict {% endif %}">
+    <input class="btn btn-outline-primary mt-2" type="submit" value="{% if predictionresult %} Re-Predict {% else %} Predict {% endif %}">
 </form>
 
 {% endblock %}
