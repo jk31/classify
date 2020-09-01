@@ -2,6 +2,7 @@
 ## Backend
 * check required fields
 * make other models available
+* make more evaluations like false negatives? maybe a graphic?
 * download example dataset
     * clean heart or churn datasets with better column names
 * demo

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load app_extras %}
 {% load crispy_forms_tags %}
 
 {% block head_title %}Datasets{% endblock %}
@@ -36,7 +37,7 @@
                             
                             <a class="btn btn-outline-dark mt-1" type="button" href="{% url 'app:training' dataset_id=dataset.pk %}">Use for training</a>
                             
-                            {% if dataset.models.all %}
+                            {% if dataset.models|saved_only %}
                                 <button class="btn btn-outline-dark mt-1" data-toggle="collapse" href="#collapse-{{ dataset.pk }}" role="button" aria-expanded="false" aria-controls="collapseModels">
                                     Show models
                                 </button>
