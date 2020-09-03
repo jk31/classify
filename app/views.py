@@ -71,7 +71,7 @@ def datasets(request):
                 new_dataset.name = str(cd["dataset"]).split(".")[0]
                 new_dataset.owner = request.user
                 new_dataset.save()
-                messages.success(request, "Your dataset has been uploaded..")
+                messages.success(request, "Your dataset has been uploaded.")
             except:
                 messages.warning(request, "Your dataset is not suitable.")
     else:

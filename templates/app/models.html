@@ -23,7 +23,7 @@
                         <div class="card-body">
                             <p class="card-text">Created:<br> {{ model.created|date:"D d M Y - g:i a" }}</p>
                             
-                            <a class="btn btn-outline-dark mt-1" type="button" href="{% url 'app:predict' model_id=model.pk %}">Use for predictions</a>
+                            <a class="btn btn-outline-primary mt-1" type="button" href="{% url 'app:predict' model_id=model.pk %}">Use for predictions</a>
                             
                             <a class="btn btn-outline-dark mt-1" type="button" href="{% url 'app:model_download' model_id=model.pk %}">Download model</a>
  

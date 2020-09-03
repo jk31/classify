@@ -6,6 +6,9 @@ main {
   padding: 20px;
 }
 
+.home-icons {
+  font-size: 10em;
+}
 
 .upload-dataset-form {
   /* Slightly adjusted 'form-group' of Bootstrap */

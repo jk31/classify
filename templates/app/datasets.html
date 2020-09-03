@@ -36,7 +36,7 @@
                         <div class="card-body">
                             <p class="card-text">Uploaded:<br> {{ dataset.created|date:"D d M Y - g:i a" }}</p>
                             
-                            <a class="btn btn-outline-dark mt-1" type="button" href="{% url 'app:training' dataset_id=dataset.pk %}">Use for training</a>
+                            <a class="btn btn-outline-primary mt-1" type="button" href="{% url 'app:training' dataset_id=dataset.pk %}">Use for training</a>
                             
                             {% if dataset.models|saved_only %}
                                 <button class="btn btn-outline-dark mt-1" data-toggle="collapse" href="#collapse-{{ dataset.pk }}" role="button" aria-expanded="false" aria-controls="collapseModels">
@@ -55,7 +55,9 @@
                             
                             <div style="clear:both"></div>
 
-                            <a class="btn btn-outline-dark mt-1" type="button" href="{% url 'app:dataset_download' dataset_id=dataset.pk %}">Download</a>
+                            <a class="btn btn-outline-dark mt-1" type="button" href="{% url 'app:dataset_download' dataset_id=dataset.pk %}">
+                                Download
+                            </a>
                             <form action="{% url 'app:dataset_delete' dataset_id=dataset.pk%}" method="post">
                                 {% csrf_token %}
                                 <input class="btn btn-outline-danger mt-1" type="submit" value="Delete"></input>
