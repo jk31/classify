@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% load crispy_forms_tags %}
 
 {% block head_title %}Home{% endblock %}
@@ -9,20 +10,46 @@
 
 {% block content %}
 
-<div class="row">
-    <div class="col-md-6 mt-5">
-        <h1 class="display-4 font-weight-bold">Create classification forms with your data.</h1>
-        <p class="h4 text-secondary py-2" style="line-height: 30px;">
-            With NAME you use decision-tree models to classify your observations in three steps. 
-            Upload your excell sheet. Select model specifications. Predict the observation.</p>
-            <a class="btn btn-outline-primary mt-2" type="button" href="">Demo Customer Churn</a>
-            <a class="btn btn-outline-primary mt-2" type="button" href="">Demo Heart Disease</a>
+
+<div class="mx-auto w-75 mt-5">
+    <div class="mt-5">
+        <h1 class="display-4 font-weight-bold">Create <span style="text-decoration: underline; text-decoration-color: #009f9d;">classification forms</span><br> with your data.</h1>
+        <a class="btn btn-outline-primary mt-3 btn-lg" type="button" href="">Demo Customer Churn</a>
+        <a class="btn btn-outline-primary mt-3 btn-lg" type="button" href="">Demo Heart Disease</a>
+        <h2 class="h4 pt-3" style="line-height: 30px;">
+            With NAME you use decision-tree models to classify your observations in three steps.
+        </h2>
     </div>
-    <div class="col-md-6 mt-5">
-        <i class="home-icons far fa-file-excel"></i>
-        <i class="home-icons fas fa-cogs"></i>
-        <i class="home-icons far fa-edit"></i>
+    <div>
+        <div class="my-4" style="text-align:center;">
+            <h3 class="h3 py-2" style="line-height: 30px;">Upload your excel sheet.</h3>
+            <img class="shadow-sm w-75" src="{% static 'app/images/excel.png' %}" alt="excel table">
+        </div>
+        <div class="my-4" style="text-align:center;">
+            <h3 class="h3 py-2" style="line-height: 30px;">Select model specifications.</h3>
+            <img class="shadow-sm w-75" src="{% static 'app/images/training3.png' %}" alt="excel table">
+        </div>
+        <div class="my-4" style="text-align:center;">
+            <h3 class="h3 py-2" style="line-height: 30px;">Predict your observation.</h3>
+            <img class="shadow-sm w-75" src="{% static 'app/images/predict2.png' %}" alt="excel table">
+        </div>
+    </div>
+    <div class="mt-5">
+        <h2 class="font-weight-bold" id="#beta">Beta Roadmap</h2>
+        <ul>
+            <li class="pt-2">&#x2705; Basic functionality</li>
+            <li class="pt-2">&#x2705; Basic account system</li>
+            <li class="pt-2">&#x2705; 2 Demos</li>
+            <li class="pt-2"><a href="https://scikit-learn.org/stable/modules/ensemble.html" target="_blank">Advanced decision-tree models</a></li>
+            <li class="pt-2">Additional functions more the account system</li>
+            <li class="pt-2">Group Accounts / Shareable Models</li>
+            <li class="pt-2">History of predictions</li>
+            <li class="pt-2">API</li>
+            <li class="pt-2">...</li>
+        </ul>
     </div>
 </div>
 
-{% endblock %}
+    
+
+{% endblock %}U+

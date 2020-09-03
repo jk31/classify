@@ -14,6 +14,7 @@
 * make scrollbar always visible because it shakes when activated with show columns? or is there a way to account for it in the base layout
 * select all variables for training
 * footer?
+* sign in -> login
 
 ## DevOps
 * find domain
@@ -22,4 +23,4 @@
     * how to save files?
 
 ## Beta
-* make other models available
+* make view

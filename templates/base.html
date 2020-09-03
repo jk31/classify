@@ -17,9 +17,6 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicons/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'favicons/site.webmanifest' %}">
 
-    <!-- Global CSS -->
-    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}" />
-    <!-- Global JS -->
     
     <!-- Bootstrap -->
     
@@ -28,6 +25,9 @@
     <link rel="stylesheet" type="text/css" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <!-- jquery -->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+
+    <!-- Global CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}" />
 </head>
 
 <body>
@@ -61,7 +61,7 @@
             <a class="nav-link" href="{% url 'account_login' %}">Sign In</a>
           </li>
           <li class="nav-item {% active_link 'account_signup' %}">
-            <a class="nav-link" href="{% url 'account_signup' %}"><b>Sign Up</b></a>
+            <a class="btn btn-primary" type="button" href="{% url 'account_signup' %}"><b>Sign Up</b></a>
           </li>
           {% endif %}
         </ul>
@@ -70,9 +70,8 @@
 
     <main>
       {% if messages %}
-        <div>
             {% for message in messages %}
-              <div class="alert alert-{{ message.tags }}" role="alert">{{message}}</div>
+                <div class="alert alert-{{ message.tags }}" role="alert">{{message}}</div>
             {% endfor %}
         </div>
       {% endif %}
@@ -82,7 +81,6 @@
     </main>
 
     <footer>
-
     </footer>
     {% endblock %}
 
