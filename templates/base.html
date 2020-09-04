@@ -22,6 +22,7 @@
     
     <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"> -->
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-custom.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'widthme.css' %}" />
     <link rel="stylesheet" type="text/css" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <!-- jquery -->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
@@ -52,13 +53,16 @@
         </ul>
 
         <ul class="navbar-nav">
+          <li class="nav-item {% active_link 'app:beta' %}">
+            <a href="{% url 'app:beta' %}" class="nav-link">Beta</a>
+          </li>
           {% if user.is_authenticated %}
           <li class="nav-item {% active_link 'account_logout' %}">
             <a class="nav-link" href="{% url 'account_logout' %}">Sign Out</a>
           </li>
           {% else %}
           <li class="nav-item {% active_link 'account_login' %}">
-            <a class="nav-link" href="{% url 'account_login' %}">Sign In</a>
+            <a class="nav-link" href="{% url 'account_login' %}">Login</a>
           </li>
           <li class="nav-item {% active_link 'account_signup' %}">
             <a class="btn btn-primary" type="button" href="{% url 'account_signup' %}"><b>Sign Up</b></a>

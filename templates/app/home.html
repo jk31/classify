@@ -1,55 +1,53 @@
 {% extends "base.html" %}
 {% load static %}
-{% load crispy_forms_tags %}
 
 {% block head_title %}Home{% endblock %}
 
 
 {% block extra_head %}
+<!-- AOS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    $(document).ready(function () {
+        AOS.init();
+    });   
+</script>
 {% endblock %}
 
 {% block content %}
 
 
-<div class="mx-auto w-75 mt-5">
+<div class="mx-auto w-xl-75 w-lg-75 mt-5">
     <div class="mt-5">
-        <h1 class="display-4 font-weight-bold">Create <span style="text-decoration: underline; text-decoration-color: #009f9d;">classification forms</span><br> with your data.</h1>
-        <a class="btn btn-outline-primary mt-3 btn-lg" type="button" href="">Demo Customer Churn</a>
-        <a class="btn btn-outline-primary mt-3 btn-lg" type="button" href="">Demo Heart Disease</a>
-        <h2 class="h4 pt-3" style="line-height: 30px;">
-            With NAME you use decision-tree models to classify your observations in three steps.
+        <div class="d-sm-none d-md-none d-lg-block d-xl-block" style="padding-top: 30px;"></div>
+        <h1 class="display-4 mb-3 font-weight-bold">Create <span style="text-decoration: underline; text-decoration-color: #009f9d;">classification forms</span><br> with your data.</h1>
+        <a class="btn btn-outline-primary mt-3 btn-lg d-md-inline d-sm-block d-lg-inline d-xl-inline" type="button" href="{% url 'app:demo_churn' %}">Demo Customer Churn</a>
+        <a class="btn btn-outline-primary mt-3 btn-lg d-md-inline d-sm-block d-lg-inline d-xl-inline" type="button" href="{% url 'app:demo_heart' %}">Demo Heart Disease</a>
+        <div class="d-lg-none d-xl-none mt-3">
+            <a class="btn btn-primary btn-lg d-md-inline d-sm-block" type="button" href="{% url 'account_signup' %}"><b>Sign Up</b></a>
+        </div>
+        <h2 class="h4 pt-3 text-secondary" style="line-height: 30px;">
+            With NAME you use decision-tree models to classify your records in <u>three</u> steps.
         </h2>
     </div>
     <div>
-        <div class="my-4" style="text-align:center;">
-            <h3 class="h3 py-2" style="line-height: 30px;">Upload your excel sheet.</h3>
-            <img class="shadow-sm w-75" src="{% static 'app/images/excel.png' %}" alt="excel table">
+        <div data-aos="fade-up" class="my-5" style="text-align:center;">
+            <h3 class="h4 py-2 text-secondary" style="line-height: 30px;">1. Upload your excel sheet.</h3>
+            <img class="shadow-sm w-75 border" src="{% static 'app/images/excel2.png' %}" alt="excel table">
         </div>
-        <div class="my-4" style="text-align:center;">
-            <h3 class="h3 py-2" style="line-height: 30px;">Select model specifications.</h3>
-            <img class="shadow-sm w-75" src="{% static 'app/images/training3.png' %}" alt="excel table">
+        <div data-aos="fade-up" class="my-5" style="text-align:center;">
+            <h3 class="h4 py-2 text-secondary" style="line-height: 30px;">2. Select model specifications and save your model.</h3>
+            <img class="shadow-sm w-75" src="{% static 'app/images/training6.png' %}" alt="model training">
         </div>
-        <div class="my-4" style="text-align:center;">
-            <h3 class="h3 py-2" style="line-height: 30px;">Predict your observation.</h3>
-            <img class="shadow-sm w-75" src="{% static 'app/images/predict2.png' %}" alt="excel table">
+        <div data-aos="fade-up" class="my-5" style="text-align:center;">
+            <h3 class="h4 py-2 text-secondary" style="line-height: 30px;">3. Use the saved form to predict a new record.</h3>
+            <img class="shadow-sm w-75" src="{% static 'app/images/predict4.png' %}" alt="prediction form">
         </div>
-    </div>
-    <div class="mt-5">
-        <h2 class="font-weight-bold" id="#beta">Beta Roadmap</h2>
-        <ul>
-            <li class="pt-2">&#x2705; Basic functionality</li>
-            <li class="pt-2">&#x2705; Basic account system</li>
-            <li class="pt-2">&#x2705; 2 Demos</li>
-            <li class="pt-2"><a href="https://scikit-learn.org/stable/modules/ensemble.html" target="_blank">Advanced decision-tree models</a></li>
-            <li class="pt-2">Additional functions more the account system</li>
-            <li class="pt-2">Group Accounts / Shareable Models</li>
-            <li class="pt-2">History of predictions</li>
-            <li class="pt-2">API</li>
-            <li class="pt-2">...</li>
-        </ul>
     </div>
 </div>
 
     
 
-{% endblock %}U+
+{% endblock %}
