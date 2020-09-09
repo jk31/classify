@@ -22,7 +22,7 @@ def home(request):
 def beta(request):
     return render(request, "app/beta.html")
 
-def demo_heart(request):
+def demo_churn(request):
     context = {
         "model": None,
         "predictform": None,
@@ -30,7 +30,7 @@ def demo_heart(request):
         "input": None,
     }
 
-    model = get_object_or_404(ClassificationModel, pk=2)
+    model = get_object_or_404(ClassificationModel, pk=1)
     context["model"] = model
 
     predictform = PredictForm(model.variables)
@@ -52,7 +52,7 @@ def demo_heart(request):
       
     return render(request, "app/predict.html", context)
 
-def demo_churn(request):
+def demo_heart(request):
     context = {
         "model": None,
         "predictform": None,
@@ -60,7 +60,7 @@ def demo_churn(request):
         "input": None,
     }
 
-    model = get_object_or_404(ClassificationModel, pk=1)
+    model = get_object_or_404(ClassificationModel, pk=2)
     context["model"] = model
 
     predictform = PredictForm(model.variables)
