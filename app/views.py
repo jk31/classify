@@ -11,7 +11,7 @@ import pandas as pd
 
 from app.forms import DatasetUploadForm, TrainingForm, SaveModelForm, PredictForm
 from app.models import Dataset, ClassificationModel
-from app.data_functions import dataset_columns, data_checkboxes_in_columns, data_goal_in_columns, train_model, prediction
+from app.data_functions import dataset_columns, data_checkboxes_in_columns, data_goal_in_columns, train_model, prediction, create_presigned_url
 
 MEDIA_ROOT = settings.MEDIA_ROOT
 
@@ -96,17 +96,17 @@ def datasets(request):
     if request.method == "POST":
         datasetuploadform = DatasetUploadForm(request.POST, request.FILES)
         if datasetuploadform.is_valid():
-            try:
-                cd = datasetuploadform.cleaned_data
-                #TODO heree add function that checks the dataset, like empty values...
-                pd.read_excel(cd["dataset"])
-                new_dataset = datasetuploadform.save(commit=False)
-                new_dataset.name = str(cd["dataset"]).split(".")[0]
-                new_dataset.owner = request.user
-                new_dataset.save()
-                messages.success(request, "Your dataset has been uploaded.")
-            except:
-                messages.warning(request, "Your dataset is not suitable.")
+            # try:
+            cd = datasetuploadform.cleaned_data
+            #TODO heree add function that checks the dataset, like empty values...
+            pd.read_excel(cd["dataset"])
+            new_dataset = datasetuploadform.save(commit=False)
+            new_dataset.name = str(cd["dataset"]).split(".")[0]
+            new_dataset.owner = request.user
+            new_dataset.save()
+            messages.success(request, "Your dataset has been uploaded.")
+            # except:
+            #     messages.warning(request, "Your dataset is not suitable.")
     else:
         datasetuploadform = DatasetUploadForm()
         

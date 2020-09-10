@@ -6,6 +6,9 @@ from sklearn import tree
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
+import boto3
+from botocore.exceptions import ClientError
+
 from django.conf import settings
 
 from app.models import Dataset, ClassificationModel
@@ -117,7 +120,29 @@ def prediction(cd, model):
         return str(prediction[0])
     except:
         return False
+    
 
 
+def create_presigned_url(object_name, expiration=3600):
+    """Generate a presigned URL to share an S3 object
+
+    :param object_name: string
+    :param expiration: Time in seconds for the presigned URL to remain valid
+    :return: Presigned URL as string. If error, returns None.
+    """
+
+    # Generate a presigned URL for the S3 object
+    s3_client = boto3.client('s3')
+    try:
+        response = s3_client.generate_presigned_url('get_object',
+                                                    Params={'Bucket': "jk-classify",
+                                                            'Key': object_name},
+                                                    ExpiresIn=expiration)
+    except ClientError as e:
+        print(e)
+        return None
+
+    # The response contains the presigned URL
+    return response
 
 
