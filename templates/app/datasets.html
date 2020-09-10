@@ -55,7 +55,7 @@
                             
                             <div style="clear:both"></div>
 
-                            <a class="btn btn-outline-dark mt-1" type="button" href="{% url 'app:dataset_download' dataset_id=dataset.pk %}">
+                            <a class="btn btn-outline-dark mt-1" type="button" href="{{ dataset.dataset.url }}">
                                 Download
                             </a>
                             <form action="{% url 'app:dataset_delete' dataset_id=dataset.pk%}" method="post">

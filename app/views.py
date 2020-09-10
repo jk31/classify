@@ -125,16 +125,16 @@ def dataset_delete(request, dataset_id):
     return redirect("app:datasets")
 
 
-@login_required
-def dataset_download(request, dataset_id):
-    dataset = get_object_or_404(Dataset, pk=dataset_id)
-    if dataset.owner == request.user:
-        file = open(MEDIA_ROOT + "/" + str(dataset.dataset), "rb")
-        response = FileResponse(file, content_type='application/force-download')
-        response['Content-Disposition'] = f'attachment; filename="{str(dataset.dataset)}"'
-        return response
-    else:
-        return redirect("app:datasets")
+# @login_required
+# def dataset_download(request, dataset_id):
+#     dataset = get_object_or_404(Dataset, pk=dataset_id)
+#     if dataset.owner == request.user:
+#         file = open(MEDIA_ROOT + "/" + str(dataset.dataset), "rb")
+#         response = FileResponse(file, content_type='application/force-download')
+#         response['Content-Disposition'] = f'attachment; filename="{str(dataset.dataset)}"'
+#         return response
+#     else:
+#         return redirect("app:datasets")
  
 
 @login_required
