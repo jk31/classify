@@ -16,7 +16,7 @@
     {% if models %}
         <h2>Your models</h2>
         <div class="row">
-            {% for model in models|saved_only %}
+            {% for model in models %}
                 <div class="col-lg-4">
                     <div class="card shadow-sm my-2">
                         <h3 class="card-header">{{ model.dataset }}</h3>
