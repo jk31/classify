@@ -131,7 +131,6 @@ def dataset_download(request, dataset_id):
     if dataset.owner == request.user:
         return redirect(dataset.dataset.url)
         
-
 @login_required
 def training(request, dataset_id):
     context = {
@@ -226,7 +225,6 @@ def models(request):
     context["models"] = models
     return render(request, "app/models.html", context)
 
-
 @login_required
 def model_delete(request, model_id):
     if request.method == "POST":
@@ -237,13 +235,11 @@ def model_delete(request, model_id):
             messages.success(request, "Model deleted.")
     return redirect("app:models")
 
-
 @login_required
 def model_download(request, model_id):
     model = get_object_or_404(ClassificationModel, pk=model_id)
     if model.owner == request.user:
         return redirect(model.trained_model.url)
-
 
 @login_required 
 def predict(request, model_id):
@@ -278,4 +274,3 @@ def predict(request, model_id):
             messages.warning(request, "Something went wrong with the prediction.")
       
     return render(request, "app/predict.html", context)
-    
