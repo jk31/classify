@@ -11,7 +11,7 @@ import pandas as pd
 
 from app.forms import DatasetUploadForm, TrainingForm, SaveModelForm, PredictForm
 from app.models import Dataset, ClassificationModel
-from app.data_functions import dataset_columns, data_checkboxes_in_columns, data_goal_in_columns, train_model, prediction, create_presigned_url
+from app.data_functions import dataset_columns, data_checkboxes_in_columns, data_goal_in_columns, train_model, prediction
 
 MEDIA_ROOT = settings.MEDIA_ROOT
 
@@ -131,7 +131,7 @@ def dataset_download(request, dataset_id):
     if dataset.owner == request.user:
         return redirect(dataset.dataset.url)
         
-        
+
 @login_required
 def training(request, dataset_id):
     context = {
@@ -148,7 +148,7 @@ def training(request, dataset_id):
         return redirect("app:datasets")
 
     context["dataset"] = dataset
-    context["dataset_columns"] = dataset_columns(dataset.dataset)
+    context["dataset_columns"] = dataset_columns(dataset)
 
     trainingform = TrainingForm(context["dataset_columns"])
     context["trainingform"] = trainingform
@@ -168,8 +168,8 @@ def training(request, dataset_id):
 
             # check if columns and goal in df, very unlikely, 
             #TODO put this all in train_model?
-            column_with_type = data_checkboxes_in_columns(dataset.dataset, checkboxes)
-            goal = data_goal_in_columns(dataset.dataset, goal)
+            column_with_type = data_checkboxes_in_columns(dataset, checkboxes)
+            goal = data_goal_in_columns(dataset, goal)
             if (column_with_type == False) or (goal == False):
                 messages.warning(request, "It seems like your selection does not align with the provided dataset.")
                 return render(request, "app/training.html", context)
@@ -177,7 +177,7 @@ def training(request, dataset_id):
             # refill form
             context["trainingform"] = trainingform
 
-            train_results = train_model(request, dataset.dataset, column_with_type, goal)
+            train_results = train_model(request, dataset, column_with_type, goal)
             if train_results == False:
                 messages.warning(request, "Something went wrong during the training.")
                 return render(request, "app/training.html", context)
@@ -242,13 +242,7 @@ def model_delete(request, model_id):
 def model_download(request, model_id):
     model = get_object_or_404(ClassificationModel, pk=model_id)
     if model.owner == request.user:
-        file = open(str(model.trained_model), "rb")
-        response = FileResponse(file, content_type='application/force-download')
-        print(str(model.trained_model))
-        response['Content-Disposition'] = f'attachment; filename="{str(model.dataset)}-{str(model.created)}.joblib"'
-        return response
-    else:
-        return redirect("app:models")
+        return redirect(model.trained_model.url)
 
 
 @login_required 

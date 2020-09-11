@@ -36,7 +36,7 @@ class ClassificationModel(models.Model):
     variables = JSONField(blank=True, null=True)
     goal = models.CharField(max_length=100, blank=True, null=True)
 
-    trained_model = models.FileField(upload_to="models/", blank=True, null=True)
+    trained_model = models.FileField(storage=PrivateMediaStorage(), upload_to="models/", blank=True, null=True)
     training_acc = models.FloatField(blank=True, null=True)
     test_acc = models.FloatField(blank=True, null=True)
 

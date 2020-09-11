@@ -2,6 +2,7 @@
 *.xlsx
 *.joblib
 staticfiles
+migrations
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
