@@ -13,7 +13,7 @@
 
 {% if request.get_full_path == "/demo-heart" or request.get_full_path == "/demo-churn" %}
     <h1>Demo Prediction for <em>{{ model.goal }}</em></h1>
-    <a class="btn btn-outline-dark my-2" type="button" href="{% url 'app:dataset_download' dataset_id=dataset.pk %}">Download Demo Dataset</a>
+    <a class="btn btn-outline-dark my-2" type="button" href="{% url 'app:dataset_download' dataset_id=model.dataset.pk %}">Download Demo Dataset</a>
 {% else %}
     <h1>Prediction for <em>{{ model.goal }}</em></h1>
     <p>Model:<br>{{ model.dataset }} - {{ model.created }}</p>

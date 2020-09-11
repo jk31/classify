@@ -24,13 +24,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if "PRODUCTION" in os.environ:
-    if os.environ["PRODUCTION"] == "1":
-        ALLOWED_HOSTS = []
-        DEBUG = False
-        SECURE_SSL_REDIRECT = True
-        CSRF_COOKIE_SECURE = True
-        SESSION_COOKIE_SECURE = True
+
+if os.environ["PRODUCTION"] == "1":
+    ALLOWED_HOSTS = []
+    DEBUG = False
+    SECURE_SSL_REDIRECT = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
 else:
     DEBUG = True # change back
     SECURE_SSL_REDIRECT = False
