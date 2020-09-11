@@ -31,6 +31,7 @@ def demo_churn(request):
     }
 
     model = get_object_or_404(ClassificationModel, pk=1)
+    print("model got")
     context["model"] = model
 
     predictform = PredictForm(model.variables)
