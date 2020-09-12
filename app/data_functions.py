@@ -1,4 +1,5 @@
 import re
+import tempfile
 from joblib import dump, load
 
 import pandas as pd
@@ -6,29 +7,28 @@ from sklearn import tree
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
+import boto3
+
 from django.conf import settings
 
 from app.models import Dataset, ClassificationModel
 
 MEDIA_ROOT = settings.MEDIA_ROOT
 
-step = 0
-def bugger():
-    global step
-    step += 1
-    print("######", step)
+s3 = boto3.resource('s3')
+bucket = s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
 
 
 def dataset_columns(dataset):
     """Return a dictionairy with the dataset columns and the respective type."""
-    df = pd.read_excel(f"{MEDIA_ROOT}/{dataset}")
+    df = pd.read_excel(dataset.dataset.url)
     return dict(zip(df.columns, ["Numerical" if str(x) in ["int64", "float64"] else "Choice" for x in df.dtypes.values]))
 
 
 def data_checkboxes_in_columns(dataset, checkboxes):
     """Checks if the checkboxes from the training request are actually in the dataset and if true, return columns with the types, otherwise return False"""
     try:
-        df = pd.read_excel(f"{MEDIA_ROOT}/{dataset}")
+        df = pd.read_excel(dataset.dataset.url)
         for checkbox in checkboxes:
             if checkbox not in df.columns:
                 return False
@@ -46,7 +46,7 @@ def data_checkboxes_in_columns(dataset, checkboxes):
 def data_goal_in_columns(dataset, goal):
     """Checks if the goal from the training request are actually in the dataset and if true, return the goal, otherwise return False"""
     try:
-        df = pd.read_excel(f"{MEDIA_ROOT}/{dataset}")
+        df = pd.read_excel(dataset.dataset.url)
         if goal not in df.columns:
             return False
         else:
@@ -58,7 +58,7 @@ def data_goal_in_columns(dataset, goal):
 def train_model(request, dataset, column_with_type, goal):
     """Train the model and save it, also takes care of the deletion of not saved models"""
     try:
-        df = pd.read_excel(f"{MEDIA_ROOT}/{dataset}")
+        df = pd.read_excel(dataset.dataset.url)
         # keep only variables and goal
         keep = list(column_with_type.keys()) + [goal]
         df = df[keep]
@@ -76,8 +76,8 @@ def train_model(request, dataset, column_with_type, goal):
         # return accuracy
         training_acc = model.score(x_df_train, y_df_train)
         test_acc = model.score(x_df_test, y_df_test)
-        
-        associated_dataset = Dataset.objects.get(dataset=dataset)
+
+        associated_dataset = Dataset.objects.get(dataset=dataset.dataset)
 
         new_model = ClassificationModel(
             owner=request.user,
@@ -88,13 +88,20 @@ def train_model(request, dataset, column_with_type, goal):
             training_acc=training_acc, 
             test_acc=test_acc)
 
-        new_model.save()    
+        new_model.save()
 
-        dump(model, f"{MEDIA_ROOT}/models/model_{new_model.pk}.joblib")
-        new_model.trained_model = f"{MEDIA_ROOT}/models/model_{new_model.pk}.joblib"
+        key = f"models/model_{new_model.pk}.joblib"
+
+        with tempfile.TemporaryFile() as fp:
+            dump(model, fp)
+            fp.seek(0)
+            bucket.put_object(Body=fp.read(), Key="media/" + key)
+
+        #dump(model, f"{MEDIA_ROOT}/models/model_{new_model.pk}.joblib")
+        new_model.trained_model = key
 
         new_model.save()
-        
+
         return new_model.pk
     except:
         return False
@@ -111,13 +118,15 @@ def prediction(cd, model):
         df_predict = df_predict.append(pd.get_dummies(df_cd))
         df_predict = df_predict.fillna(0)
 
-        prediction_model = load(f"{model.trained_model}")
-        prediction = prediction_model.predict(df_predict.iloc[0,:].values.reshape(1, -1))
-        
-        return str(prediction[0])
+        with tempfile.TemporaryFile() as fp:
+            bucket.download_fileobj(Fileobj=fp, Key="media/" + str(model.trained_model))
+            fp.seek(0)
+            prediction_model = load(fp)
+
+            prediction = prediction_model.predict(df_predict.iloc[0,:].values.reshape(1, -1))
+            return str(prediction[0])
     except:
         return False
-
 
 
 

@@ -96,17 +96,17 @@ def datasets(request):
     if request.method == "POST":
         datasetuploadform = DatasetUploadForm(request.POST, request.FILES)
         if datasetuploadform.is_valid():
-            try:
-                cd = datasetuploadform.cleaned_data
-                #TODO heree add function that checks the dataset, like empty values...
-                pd.read_excel(cd["dataset"])
-                new_dataset = datasetuploadform.save(commit=False)
-                new_dataset.name = str(cd["dataset"]).split(".")[0]
-                new_dataset.owner = request.user
-                new_dataset.save()
-                messages.success(request, "Your dataset has been uploaded.")
-            except:
-                messages.warning(request, "Your dataset is not suitable.")
+            # try:
+            cd = datasetuploadform.cleaned_data
+            #TODO heree add function that checks the dataset, like empty values...
+            pd.read_excel(cd["dataset"])
+            new_dataset = datasetuploadform.save(commit=False)
+            new_dataset.name = str(cd["dataset"]).split(".")[0]
+            new_dataset.owner = request.user
+            new_dataset.save()
+            messages.success(request, "Your dataset has been uploaded.")
+            # except:
+            #     messages.warning(request, "Your dataset is not suitable.")
     else:
         datasetuploadform = DatasetUploadForm()
         
@@ -129,14 +129,8 @@ def dataset_delete(request, dataset_id):
 def dataset_download(request, dataset_id):
     dataset = get_object_or_404(Dataset, pk=dataset_id)
     if dataset.owner == request.user:
-        file = open(MEDIA_ROOT + "/" + str(dataset.dataset), "rb")
-        response = FileResponse(file, content_type='application/force-download')
-        response['Content-Disposition'] = f'attachment; filename="{str(dataset.dataset)}"'
-        return response
-    else:
-        return redirect("app:datasets")
- 
-
+        return redirect(dataset.dataset.url)
+        
 @login_required
 def training(request, dataset_id):
     context = {
@@ -153,7 +147,7 @@ def training(request, dataset_id):
         return redirect("app:datasets")
 
     context["dataset"] = dataset
-    context["dataset_columns"] = dataset_columns(dataset.dataset)
+    context["dataset_columns"] = dataset_columns(dataset)
 
     trainingform = TrainingForm(context["dataset_columns"])
     context["trainingform"] = trainingform
@@ -173,8 +167,8 @@ def training(request, dataset_id):
 
             # check if columns and goal in df, very unlikely, 
             #TODO put this all in train_model?
-            column_with_type = data_checkboxes_in_columns(dataset.dataset, checkboxes)
-            goal = data_goal_in_columns(dataset.dataset, goal)
+            column_with_type = data_checkboxes_in_columns(dataset, checkboxes)
+            goal = data_goal_in_columns(dataset, goal)
             if (column_with_type == False) or (goal == False):
                 messages.warning(request, "It seems like your selection does not align with the provided dataset.")
                 return render(request, "app/training.html", context)
@@ -182,7 +176,7 @@ def training(request, dataset_id):
             # refill form
             context["trainingform"] = trainingform
 
-            train_results = train_model(request, dataset.dataset, column_with_type, goal)
+            train_results = train_model(request, dataset, column_with_type, goal)
             if train_results == False:
                 messages.warning(request, "Something went wrong during the training.")
                 return render(request, "app/training.html", context)
@@ -231,7 +225,6 @@ def models(request):
     context["models"] = models
     return render(request, "app/models.html", context)
 
-
 @login_required
 def model_delete(request, model_id):
     if request.method == "POST":
@@ -242,19 +235,11 @@ def model_delete(request, model_id):
             messages.success(request, "Model deleted.")
     return redirect("app:models")
 
-
 @login_required
 def model_download(request, model_id):
     model = get_object_or_404(ClassificationModel, pk=model_id)
     if model.owner == request.user:
-        file = open(str(model.trained_model), "rb")
-        response = FileResponse(file, content_type='application/force-download')
-        print(str(model.trained_model))
-        response['Content-Disposition'] = f'attachment; filename="{str(model.dataset)}-{str(model.created)}.joblib"'
-        return response
-    else:
-        return redirect("app:models")
-
+        return redirect(model.trained_model.url)
 
 @login_required 
 def predict(request, model_id):
@@ -289,4 +274,3 @@ def predict(request, model_id):
             messages.warning(request, "Something went wrong with the prediction.")
       
     return render(request, "app/predict.html", context)
-    

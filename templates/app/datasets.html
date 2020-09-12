@@ -15,12 +15,12 @@
     <div class="container">
         <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ datasetuploadform.dataset.errors }}
             <label class="h1 pb-3" for="{{ datasetuploadform.dataset.id_for_label }}">Upload a new dataset</label> <br>
             <div class="d-flex justify-content-center">
                 {{ datasetuploadform.dataset }}
                 <input class="btn btn-outline-success mx-2" type="submit" value="Upload">
             </div>
+            {{ datasetuploadform.dataset.errors }}
         </form>
     </div>
 </section>
@@ -58,7 +58,7 @@
                             <a class="btn btn-outline-dark mt-1" type="button" href="{% url 'app:dataset_download' dataset_id=dataset.pk %}">
                                 Download
                             </a>
-                            <form action="{% url 'app:dataset_delete' dataset_id=dataset.pk%}" method="post">
+                            <form action="{% url 'app:dataset_delete' dataset_id=dataset.pk %}" method="post">
                                 {% csrf_token %}
                                 <input class="btn btn-outline-danger mt-1" type="submit" value="Delete"></input>
                             </form>

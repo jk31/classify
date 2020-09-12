@@ -24,13 +24,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if "PRODUCTION" in os.environ:
-    if os.environ["PRODUCTION"] == "1":
-        ALLOWED_HOSTS = []
-        DEBUG = False
-        SECURE_SSL_REDIRECT = True
-        CSRF_COOKIE_SECURE = True
-        SESSION_COOKIE_SECURE = True
+
+if os.environ["PRODUCTION"] == "1":
+    ALLOWED_HOSTS = []
+    DEBUG = False
+    SECURE_SSL_REDIRECT = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
 else:
     DEBUG = True # change back
     SECURE_SSL_REDIRECT = False
@@ -45,7 +45,7 @@ EMAIL_PASSWORD = os.environ["EMAIL_PASSWORD"]
 # Application definition
 
 INSTALLED_APPS = [
-    "app",
+    "app.apps.AppConfig",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'active_link',
+    'storages',
 ]
 
 SITE_ID = 1
@@ -110,12 +111,26 @@ DATABASES = {
     }
 }
 
+AWS_ACCESS_KEY_ID = os.environ["AWS_ACCESS_KEY_ID"]
+AWS_SECRET_ACCESS_KEY = os.environ["AWS_SECRET_ACCESS_KEY"]
+AWS_STORAGE_BUCKET_NAME = 'jk-classify'
+AWS_S3_REGION_NAME = "eu-central-1"
+AWS_DEFAULT_ACL = None
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+PUBLIC_MEDIA_LOCATION = 'media'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
+DEFAULT_FILE_STORAGE = 'classify.storage_backends.PublicMediaStorage'
+PRIVATE_MEDIA_LOCATION = 'private'
+PRIVATE_FILE_STORAGE = 'classify.storage_backends.PrivateMediaStorage'
+
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
     # `allauth` specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
+AUTH_USER_MODEL = 'app.CustomUser'
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -131,7 +146,7 @@ ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_USERNAME_REQUIRED = False
-# ACCOUNT_USER_MODEL_USERNAME_FIELD = "email"
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
 # Page after Login
 LOGIN_REDIRECT_URL = "/"
