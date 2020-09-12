@@ -11,6 +11,12 @@ main {
   font-size: 7em;
 }
 
+.underline-color {
+  text-decoration: underline; 
+  text-decoration-color: #009f9d;
+}
+
+
 .upload-dataset-form {
   /* Slightly adjusted 'form-group' of Bootstrap */
   width: 30%;
