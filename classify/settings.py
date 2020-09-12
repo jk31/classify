@@ -132,8 +132,8 @@ AUTHENTICATION_BACKENDS = [
 ]
 AUTH_USER_MODEL = 'app.CustomUser'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = "mail.privateemail.com"
 EMAIL_PORT = 587
 EMAIL_HOST_USER = EMAIL_USERNAME
@@ -146,7 +146,7 @@ ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_USERNAME_REQUIRED = False
-# ACCOUNT_USER_MODEL_USERNAME_FIELD = "email"
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
 # Page after Login
 LOGIN_REDIRECT_URL = "/"

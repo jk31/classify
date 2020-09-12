@@ -16,6 +16,9 @@ main {
   text-decoration-color: #009f9d;
 }
 
+.footer {
+  margin-bottom: 30px;
+}
 
 .upload-dataset-form {
   /* Slightly adjusted 'form-group' of Bootstrap */
