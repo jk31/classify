@@ -5,15 +5,7 @@
 
 
 {% block extra_head %}
-<!-- AOS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>
-    $(document).ready(function () {
-        AOS.init();
-    });   
-</script>
+
 {% endblock %}
 
 {% block content %}
@@ -26,7 +18,7 @@
         <a class="btn btn-outline-primary mt-3 btn-lg d-md-inline d-sm-block d-lg-inline d-xl-inline" type="button" href="{% url 'app:demo_churn' %}">Demo Customer Churn</a>
         <a class="btn btn-outline-primary mt-3 btn-lg d-md-inline d-sm-block d-lg-inline d-xl-inline" type="button" href="{% url 'app:demo_heart' %}">Demo Heart Disease</a>
         <div class="d-lg-none d-xl-none mt-3">
-            <a class="btn btn-primary d-md-inline d-sm-block" type="button" href="{% url 'account_signup' %}"><b>Sign Up</b></a>
+            <a class="btn btn-lg btn-primary d-md-inline d-sm-block" type="button" href="{% url 'account_signup' %}"><b>Sign Up</b></a>
         </div>
         <h2 class="h4 pt-5 text-secondary" style="line-height: 30px;">
             Classifyforms brings machine learning models for classification problems in a simple way to the enduser. Just in <u>three</u> steps.

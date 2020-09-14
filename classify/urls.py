@@ -18,12 +18,17 @@ from django.urls import path, include
 
 from django.conf import settings
 from django.conf.urls.static import static
+from django.shortcuts import render
 
 from django.views.generic.base import RedirectView
+
+def policy(request):
+    return render(request, "policy.html")
 
 urlpatterns = [
     path('admin_lol/', admin.site.urls),
     path("", include("app.urls")),
+    path("policy", policy, name="policy"),
     path('accounts/email/', RedirectView.as_view(url="/")),
     path('accounts/', include('allauth.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
