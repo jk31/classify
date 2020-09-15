@@ -11,17 +11,17 @@
 {% block content %}
 
 
-<div class="mx-auto w-xl-75 w-lg-75 mt-5">
+<div class="mx-auto w-lg-75 w-xl-75 mt-5 px-3 px-sm-3 px-md-3 px-lg-0 px-xl-0">
     <div class="mt-5">
-        <div class="d-sm-none d-md-none d-lg-block d-xl-block" style="padding-top: 30px;"></div>
+        <div class="d-none d-lg-block d-xl-block" style="padding-top: 30px;"></div>
         <h1 class="display-4 mb-3 font-weight-bold">Create <span class="underline-color">classification forms</span><br> with your data.</h1>
-        <a class="btn btn-outline-primary mt-3 btn-lg d-md-inline d-sm-block d-lg-inline d-xl-inline" type="button" href="{% url 'app:demo_churn' %}">Demo Customer Churn</a>
-        <a class="btn btn-outline-primary mt-3 btn-lg d-md-inline d-sm-block d-lg-inline d-xl-inline" type="button" href="{% url 'app:demo_heart' %}">Demo Heart Disease</a>
+        <a class="btn btn-outline-primary mt-3 btn-lg d-block d-lg-inline d-xl-inline" type="button" href="{% url 'app:demo_churn' %}">Demo Customer Churn</a>
+        <a class="btn btn-outline-primary mt-3 btn-lg d-block d-lg-inline d-xl-inline" type="button" href="{% url 'app:demo_heart' %}">Demo Heart Disease</a>
         <div class="d-lg-none d-xl-none mt-3">
-            <a class="btn btn-lg btn-primary d-md-inline d-sm-block" type="button" href="{% url 'account_signup' %}"><b>Sign Up</b></a>
+            <a class="btn btn-lg btn-primary d-block" type="button" href="{% url 'account_signup' %}"><b>Sign Up</b></a>
         </div>
         <h2 class="h4 pt-5 text-secondary" style="line-height: 30px;">
-            Classifyforms brings machine learning models for classification problems in a simple way to the enduser. Just in <u>three</u> steps.
+            Classifyforms brings machine learning models for classification problems in a simple way to the end user. Just in <u>three</u> steps.
         </h2>
     </div>
     <div>

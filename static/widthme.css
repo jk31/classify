@@ -4,6 +4,10 @@
     width: 100% !important;
   }
 
+  .w-xs-90 {
+    width: 90% !important;
+  }
+
   .w-xs-75 {
     width: 75% !important;
   }
@@ -21,6 +25,10 @@
 @media (min-width: 576px) and (max-width: 767.98px) {
   .w-sm-100 {
     width: 100% !important;
+  }
+
+  .w-sm-90 {
+    width: 90% !important;
   }
 
   .w-sm-75 {
@@ -43,6 +51,10 @@
     width: 100% !important;
   }
 
+  .w-md-90 {
+    width: 90% !important;
+  }
+
   .w-md-75 {
     width: 75% !important;
   }
@@ -61,6 +73,10 @@
 
   .w-lg-100 {
     width: 100% !important;
+  }
+
+  .w-lg-90 {
+    width: 90% !important;
   }
 
   .w-lg-75 {
@@ -83,6 +99,10 @@
 
   .w-xl-100 {
     width: 100% !important;
+  }
+
+  .w-xl-90 {
+    width: 90% !important;
   }
 
   .w-xl-75 {

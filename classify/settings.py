@@ -149,7 +149,7 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
 # Page after Login
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/datasets"
 LOGOUT_REDIRECT_URL = "/"
 
 # Password validation
