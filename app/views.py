@@ -125,11 +125,13 @@ def dataset_delete(request, dataset_id):
     return redirect("app:datasets")
 
 
-@login_required
+# @login_required
 def dataset_download(request, dataset_id):
     dataset = get_object_or_404(Dataset, pk=dataset_id)
-    if dataset.owner == request.user:
+    if (dataset.owner == request.user) or (dataset_id in [1, 2]):
         return redirect(dataset.dataset.url)
+    else:
+        return redirect("app:home")
         
 @login_required
 def training(request, dataset_id):
