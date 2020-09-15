@@ -7,7 +7,7 @@
 
 {% block content %}
 
-<div class="mx-auto w-50">
+<div class="mx-auto w-75 w-lg-50 w-xl-50 mt-5">
   <h1>{% trans "Sign Up" %}</h1>
 
   <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
@@ -18,7 +18,7 @@
     {% if redirect_field_value %}
     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
     {% endif %}
-    <button class="btn btn-outline-primary mt-2" type="submit">{% trans "Sign Up" %} &raquo;</button>
+    <button class="btn btn-outline-primary mt-2 w-xs-100 w-sm-100" type="submit">{% trans "Sign Up" %}</button>
   </form>
 </div>
 

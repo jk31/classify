@@ -26,17 +26,19 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 
 if os.environ["PRODUCTION"] == "1":
-    ALLOWED_HOSTS = []
     DEBUG = False
     SECURE_SSL_REDIRECT = True
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
+    ALLOWED_HOSTS = []
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 else:
-    DEBUG = True # change back
+    DEBUG = True
     SECURE_SSL_REDIRECT = False
     CSRF_COOKIE_SECURE = False
     SESSION_COOKIE_SECURE = False
     ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 EMAIL_USERNAME = os.environ["EMAIL_USERNAME"]
@@ -132,8 +134,6 @@ AUTHENTICATION_BACKENDS = [
 ]
 AUTH_USER_MODEL = 'app.CustomUser'
 
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = "mail.privateemail.com"
 EMAIL_PORT = 587
 EMAIL_HOST_USER = EMAIL_USERNAME
@@ -149,7 +149,7 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
 # Page after Login
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/datasets"
 LOGOUT_REDIRECT_URL = "/"
 
 # Password validation
