@@ -7,6 +7,8 @@ from django.http import HttpResponse, FileResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
+from ratelimit.decorators import ratelimit
+
 import pandas as pd
 
 from app.forms import DatasetUploadForm, TrainingForm, SaveModelForm, PredictForm
@@ -126,6 +128,7 @@ def dataset_delete(request, dataset_id):
 
 
 # @login_required
+@ratelimit(key='ip', rate='100/h')
 def dataset_download(request, dataset_id):
     dataset = get_object_or_404(Dataset, pk=dataset_id)
     if (dataset.owner == request.user) or (dataset_id in [1, 2]):
@@ -134,6 +137,7 @@ def dataset_download(request, dataset_id):
         return redirect("app:home")
         
 @login_required
+@ratelimit(key='ip', rate='100/h')
 def training(request, dataset_id):
     context = {
         "dataset": None,
@@ -194,6 +198,7 @@ def training(request, dataset_id):
     return render(request, "app/training.html", context)
 
 @login_required
+@ratelimit(key='ip', rate='100/h')
 def save_model(request):
     if request.method == "POST":
         savemodelform = SaveModelForm(request.POST)
@@ -238,12 +243,14 @@ def model_delete(request, model_id):
     return redirect("app:models")
 
 @login_required
+@ratelimit(key='ip', rate='100/h')
 def model_download(request, model_id):
     model = get_object_or_404(ClassificationModel, pk=model_id)
     if model.owner == request.user:
         return redirect(model.trained_model.url)
 
-@login_required 
+@login_required
+@ratelimit(key='ip', rate='100/h')
 def predict(request, model_id):
 
     context = {
